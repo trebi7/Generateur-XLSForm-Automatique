@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>XLSForm Pro — Convertisseur de questionnaires KoboToolbox</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
+
+<title>🧪 TEST — XLSForm Pro — Convertisseur de questionnaires KoboToolbox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -18,12 +20,10 @@
   --texte:       #1A1A2E;
   --gris:        #6B7280;
   --blanc:       #FFFFFF;
-  --erreur:      #DC2626;
   --succes:      #059669;
   --violet:      #7C3AED;
   --violet-clair:#EDE9FE;
   --radius:      12px;
-  --radius-sm:   8px;
   --shadow:      0 4px 24px rgba(13,59,102,.10);
   --shadow-hover:0 8px 32px rgba(13,59,102,.18);
   --transition:  .22s cubic-bezier(.4,0,.2,1);
@@ -51,23 +51,10 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
 .hero-eyebrow { color: var(--orange); font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 16px; }
 .hero h1 { color: var(--blanc); margin-bottom: 20px; }
 .hero h1 em { color: var(--orange); font-style: normal; border-bottom: 3px solid var(--orange); }
-.hero-sub { color: rgba(255,255,255,.78); font-size: 1.05rem; margin-bottom: 36px; max-width: 520px; }
-.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
-.stat { display: flex; flex-direction: column; }
-.stat-num { font-family: 'Sora', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--orange); line-height: 1; }
-.stat-label { font-size: .78rem; color: rgba(255,255,255,.6); margin-top: 4px; }
+.hero-sub { color: rgba(255,255,255,.78); font-size: 1.05rem; margin-bottom: 8px; max-width: 520px; }
 .hero-visual { width: 220px; height: 220px; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.15); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; flex-shrink: 0; }
 .hero-icon { font-size: 4rem; }
 .hero-visual-label { color: rgba(255,255,255,.7); font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
-
-/* BADGE ABONNEMENT */
-.abonnement-banner { background: linear-gradient(90deg, var(--violet) 0%, #9333EA 100%); padding: 18px 0; }
-.abonnement-inner { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
-.abonnement-icon { font-size: 1.6rem; }
-.abonnement-text { color: var(--blanc); }
-.abonnement-text strong { font-family: 'Sora', sans-serif; font-size: 1rem; }
-.abonnement-text p { font-size: .82rem; opacity: .85; margin-top: 2px; }
-.abonnement-pill { background: rgba(255,255,255,.2); color: var(--blanc); font-size: .75rem; font-weight: 700; padding: 4px 14px; border-radius: 99px; border: 1px solid rgba(255,255,255,.35); white-space: nowrap; }
 
 /* HOW */
 .how { padding: 64px 0; }
@@ -81,11 +68,10 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
 .step-desc { font-size: .8rem; color: var(--gris); }
 
 /* PACKS */
-.packs-section { padding: 72px 0 80px; }
-.packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-bottom: 56px; }
-.pack-card { background: var(--blanc); border-radius: var(--radius); box-shadow: var(--shadow); padding: 0; position: relative; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); border: 2px solid transparent; overflow: hidden; cursor: pointer; }
+.packs-section { padding: 24px 0 80px; }
+.packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.pack-card { background: var(--blanc); border-radius: var(--radius); box-shadow: var(--shadow); padding: 0; position: relative; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); border: 2px solid transparent; overflow: hidden; }
 .pack-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--orange); }
-.pack-card.selected { border-color: var(--bleu); box-shadow: 0 0 0 4px rgba(13,59,102,.12), var(--shadow); }
 .pack-progress { height: 5px; background: var(--bleu-clair); }
 .pack-progress-fill { height: 100%; background: linear-gradient(90deg, var(--bleu-mid), var(--orange)); }
 .pack-price-badge { position: absolute; top: 20px; right: 20px; background: var(--orange); color: var(--bleu); font-family: 'Sora', sans-serif; font-weight: 800; font-size: .85rem; padding: 6px 14px; border-radius: 99px; line-height: 1.2; text-align: center; white-space: nowrap; }
@@ -94,107 +80,33 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
 .pack-label { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gris); margin-bottom: 4px; }
 .pack-name { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--bleu); margin-bottom: 6px; }
 .pack-tagline { font-size: .82rem; color: var(--gris); line-height: 1.4; }
-
-/* Badge abonnement sur la carte */
 .pack-abonnement { margin: 0 24px 10px; background: var(--violet-clair); color: var(--violet); font-size: .72rem; font-weight: 700; padding: 5px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px; }
-
 .pack-deliverables { padding: 0 24px 16px; list-style: none; display: flex; flex-direction: column; gap: 7px; }
 .pack-deliverables li { display: flex; align-items: flex-start; gap: 8px; font-size: .82rem; color: var(--texte); line-height: 1.4; }
 .pack-deliverables li::before { content: '✓'; color: var(--succes); font-weight: 700; font-size: .88rem; flex-shrink: 0; margin-top: 1px; }
 .pack-deliverables li.inherited { color: var(--gris); font-size: .78rem; }
 .pack-deliverables li.inherited::before { content: '↳'; color: #B0C4D8; font-size: .78rem; }
 .pack-divider { margin: 4px 0; height: 1px; background: var(--bleu-clair); }
-.pack-select-btn { margin: 0 24px 20px; width: calc(100% - 48px); padding: 10px 0; background: var(--bleu-clair); color: var(--bleu); border: 2px solid var(--bleu-clair); border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-weight: 700; font-size: .87rem; cursor: pointer; transition: all var(--transition); display: flex; align-items: center; justify-content: center; gap: 6px; }
-.pack-select-btn:hover { background: var(--bleu); color: var(--blanc); border-color: var(--bleu); }
-.pack-card.selected .pack-select-btn { background: var(--bleu); color: var(--blanc); border-color: var(--bleu); }
-.pack-card.selected .pack-select-btn::before { content: '✓ '; }
+.pack-select-btn { display: block; text-decoration: none; margin: 0 24px 20px; width: calc(100% - 48px); padding: 12px 0; background: var(--bleu); color: var(--blanc); border: 2px solid var(--bleu); border-radius: 8px; font-family: 'Sora', sans-serif; font-weight: 700; font-size: .87rem; cursor: pointer; transition: all var(--transition); text-align: center; }
+.pack-select-btn:hover { background: var(--bleu-mid); border-color: var(--bleu-mid); transform: translateY(-1px); }
 .pack-card.popular::before { content: '⭐ Populaire'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--bleu); color: var(--orange); font-size: .68rem; font-weight: 700; padding: 4px 16px; border-radius: 0 0 8px 8px; letter-spacing: .05em; z-index: 1; }
 
-/* FORMULAIRE */
-.order-form { background: var(--blanc); border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px; max-width: 720px; margin: 0 auto; }
-.order-form h2 { color: var(--bleu); margin-bottom: 8px; }
-.form-subtitle { color: var(--gris); font-size: .9rem; margin-bottom: 28px; }
-
-/* Onglets commande / mise à jour */
-.form-tabs { display: flex; gap: 0; border-radius: var(--radius-sm); overflow: hidden; border: 1.5px solid #D1D8E0; margin-bottom: 28px; }
-.form-tab { flex: 1; padding: 11px 16px; background: var(--blanc); color: var(--gris); font-family: 'Sora', sans-serif; font-weight: 700; font-size: .83rem; border: none; cursor: pointer; transition: all var(--transition); text-align: center; }
-.form-tab.active { background: var(--bleu); color: var(--blanc); }
-.form-tab:first-child { border-right: 1.5px solid #D1D8E0; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-.selected-pack-recap { background: var(--bleu-clair); border-left: 4px solid var(--bleu); border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 24px; display: none; }
-.selected-pack-recap.visible { display: block; }
-.recap-title { font-size: .75rem; font-weight: 700; color: var(--gris); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
-.recap-name { font-family: 'Sora', sans-serif; font-weight: 800; color: var(--bleu); font-size: 1rem; }
-.recap-price { color: var(--orange-dark); font-weight: 700; font-size: .88rem; margin-top: 2px; }
-.recap-validity { display: inline-flex; align-items: center; gap: 5px; background: var(--violet-clair); color: var(--violet); font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; margin-top: 8px; }
-
-.form-group { margin-bottom: 18px; }
-.form-label { display: block; font-size: .83rem; font-weight: 600; color: var(--bleu); margin-bottom: 6px; }
-.form-label .required { color: var(--orange-dark); }
-.form-input, .form-select, .form-textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #D1D8E0; border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: .9rem; color: var(--texte); background: var(--blanc); transition: border-color var(--transition), box-shadow var(--transition); outline: none; }
-.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--bleu); box-shadow: 0 0 0 3px rgba(13,59,102,.10); }
-.form-textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
-.form-input.error { border-color: var(--erreur); }
-
-/* Zone observations */
-.observations-box { background: linear-gradient(135deg, #FEFCE8, #FFF7ED); border: 1.5px solid #FDE68A; border-radius: var(--radius-sm); padding: 16px 20px; margin-bottom: 18px; }
-.observations-box-title { font-size: .78rem; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-.observations-box-sub { font-size: .78rem; color: #92400E; opacity: .8; margin-bottom: 12px; }
-
-/* Zone upload */
-.upload-zone { border: 2px dashed #B0C4D8; border-radius: var(--radius-sm); padding: 32px 20px; text-align: center; cursor: pointer; transition: all var(--transition); background: var(--fond); position: relative; }
-.upload-zone:hover, .upload-zone.dragover { border-color: var(--bleu); background: var(--bleu-clair); }
-.upload-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-.upload-icon { font-size: 2.2rem; margin-bottom: 10px; }
-.upload-text { font-weight: 600; color: var(--bleu); font-size: .9rem; margin-bottom: 4px; }
-.upload-sub { font-size: .78rem; color: var(--gris); }
-.upload-file-name { margin-top: 12px; font-size: .82rem; font-weight: 600; color: var(--succes); display: none; }
-
-/* Clé d'accès */
-.access-key-info { background: var(--bleu-clair); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 18px; font-size: .82rem; color: var(--bleu); display: flex; align-items: flex-start; gap: 10px; }
-.access-key-info strong { font-weight: 700; }
-
-/* Boutons */
-.btn-primary { width: 100%; padding: 16px 32px; background: var(--orange); color: var(--bleu); border: none; border-radius: var(--radius-sm); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: all var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; }
-.btn-primary:hover:not(:disabled) { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(244,162,97,.4); }
-.btn-primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-.btn-update { background: var(--violet); color: var(--blanc); }
-.btn-update:hover:not(:disabled) { background: #6D28D9; box-shadow: 0 6px 20px rgba(124,58,237,.35); }
-.chariow-note { text-align: center; margin-top: 14px; font-size: .78rem; color: var(--gris); }
-.chariow-note a { color: var(--bleu); font-weight: 600; }
-
-/* LOADER */
-.loader-overlay { display: none; position: fixed; inset: 0; background: rgba(13,59,102,.85); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
-.loader-overlay.active { display: flex; }
-.loader-spinner { width: 52px; height: 52px; border: 5px solid rgba(255,255,255,.2); border-top-color: var(--orange); border-radius: 50%; animation: spin .9s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.loader-text { color: var(--blanc); font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; text-align: center; }
-.loader-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-.loader-step { display: flex; align-items: center; gap: 10px; font-size: .82rem; color: rgba(255,255,255,.5); transition: color .3s; }
-.loader-step.active { color: var(--orange); }
-.loader-step.done { color: rgba(255,255,255,.8); }
-.loader-step-icon { font-size: 1rem; width: 22px; text-align: center; }
-
-/* TOAST */
-.toast { position: fixed; bottom: 32px; right: 32px; background: var(--succes); color: var(--blanc); font-weight: 600; font-size: .88rem; padding: 14px 24px; border-radius: var(--radius-sm); box-shadow: var(--shadow); transform: translateY(80px); opacity: 0; transition: all .35s cubic-bezier(.4,0,.2,1); z-index: 2000; max-width: 340px; display: flex; align-items: center; gap: 10px; }
-.toast.error { background: var(--erreur); }
-.toast.show { transform: translateY(0); opacity: 1; }
+/* UPDATE CTA */
+.update-cta { text-align: center; margin-top: 48px; padding: 28px; background: var(--violet-clair); border-radius: var(--radius); }
+.update-cta p { color: #4C1D95; font-size: .9rem; margin-bottom: 12px; }
+.update-cta a { display: inline-block; background: var(--violet); color: #fff; text-decoration: none; padding: 10px 24px; border-radius: 8px; font-family: 'Sora', sans-serif; font-weight: 700; font-size: .85rem; transition: background var(--transition); }
+.update-cta a:hover { background: #6D28D9; }
 
 /* FOOTER */
-.footer { background: var(--bleu); color: rgba(255,255,255,.6); text-align: center; padding: 28px 24px; font-size: .8rem; margin-top: 80px; }
+.footer { background: var(--bleu); color: rgba(255,255,255,.6); text-align: center; padding: 28px 24px; font-size: .8rem; margin-top: 40px; }
 .footer strong { color: var(--blanc); }
 
-/* RESPONSIVE */
 @media (max-width: 640px) {
   .packs-grid { grid-template-columns: 1fr; }
-  .order-form { padding: 24px; }
   .hero-inner { flex-direction: column; gap: 32px; }
   .hero-visual { width: 100%; height: 140px; flex-direction: row; }
   .steps { gap: 16px; }
   .step:not(:last-child)::after { display: none; }
-  .abonnement-inner { flex-direction: column; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -203,15 +115,15 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
 </head>
 <body>
 
-<!-- NAV -->
+<div style="background:repeating-linear-gradient(45deg,#7C3AED,#7C3AED 12px,#6D28D9 12px,#6D28D9 24px);color:#fff;text-align:center;padding:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;">🧪 MODE TEST — Aucun paiement Chariow</div>
+
 <nav class="nav">
   <div class="container nav-inner">
-    <a href="#" class="nav-logo">📋 XLSForm Pro <span>by Armand TRE BI</span></a>
-    <a href="#order" class="nav-link">Commander →</a>
+    <a href="TEST_index.html" class="nav-logo">📋 XLSForm Pro <span>by Armand TRE BI</span></a>
+    <a href="#packs" class="nav-link">Voir les packs →</a>
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="container">
     <div class="hero-inner">
@@ -219,12 +131,6 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
         <p class="hero-eyebrow">Spécialiste KoboToolbox · Afrique francophone</p>
         <h1>Votre questionnaire Word ou Excel<br>en <em>XLSForm prêt à déployer</em></h1>
         <p class="hero-sub">Gagnez des jours de travail. Chargez votre fichier, payez en ligne, recevez un XLSForm validé — et rechargez autant de fois que vous voulez pendant 30 jours si votre questionnaire évolue.</p>
-        <div class="hero-stats">
-          <div class="stat"><span class="stat-num">76+</span><span class="stat-label">variables WASH gérées</span></div>
-          <div class="stat"><span class="stat-num">38</span><span class="stat-label">listes de modalités</span></div>
-          <div class="stat"><span class="stat-num">30j</span><span class="stat-label">d'accès par achat</span></div>
-          <div class="stat"><span class="stat-num">∞</span><span class="stat-label">mises à jour incluses</span></div>
-        </div>
       </div>
       <div class="hero-visual">
         <div class="hero-icon">📋</div>
@@ -234,19 +140,6 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
   </div>
 </section>
 
-<!-- BANNIÈRE ABONNEMENT -->
-<div class="abonnement-banner">
-  <div class="container abonnement-inner">
-    <div class="abonnement-icon">🔄</div>
-    <div class="abonnement-text">
-      <strong>Accès 30 jours inclus dans chaque pack</strong>
-      <p>Votre questionnaire évolue ? Rechargez la version mise à jour et recevez un nouveau ZIP — autant de fois que nécessaire pendant 30 jours.</p>
-    </div>
-    <div class="abonnement-pill">✦ Mises à jour illimitées</div>
-  </div>
-</div>
-
-<!-- COMMENT ÇA MARCHE -->
 <section class="how">
   <div class="container">
     <h2 class="section-title">Comment ça marche</h2>
@@ -260,7 +153,7 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
       <div class="step">
         <div class="step-num">2</div>
         <div class="step-title">Chargez et payez</div>
-        <div class="step-desc">Déposez votre questionnaire — le traitement démarre immédiatement.</div>
+        <div class="step-desc">Déposez votre questionnaire, payez sur Chariow — vous recevez une clé d'accès.</div>
       </div>
       <div class="step">
         <div class="step-num">3</div>
@@ -276,16 +169,15 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
   </div>
 </section>
 
-<!-- PACKS -->
 <section class="packs-section" id="packs">
   <div class="container">
     <h2 class="section-title">Choisissez votre pack</h2>
-    <p class="section-sub">Cliquez sur un pack pour le sélectionner, puis remplissez le formulaire ci-dessous.</p>
+    <p class="section-sub">Chaque pack ouvre sa propre page de commande, adaptée à ce qu'il inclut.</p>
 
     <div class="packs-grid">
 
       <!-- KOBOCONVERT -->
-      <div class="pack-card" data-pack="standard" data-price="7 000" onclick="selectPack(this)">
+      <div class="pack-card">
         <div class="pack-progress"><div class="pack-progress-fill" style="width:25%"></div></div>
         <div class="pack-price-badge">7 000 FCFA<small>KoboConvert</small></div>
         <div class="pack-header">
@@ -302,11 +194,11 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
           <li>Tout livré en fichier ZIP par email</li>
           <li>Mises à jour illimitées pendant 30 jours</li>
         </ul>
-        <button class="pack-select-btn" onclick="event.stopPropagation(); selectPack(this.closest('.pack-card'))">Sélectionner ce pack</button>
+        <a class="pack-select-btn" href="TEST_commande.html?pack=standard">Sélectionner ce pack</a>
       </div>
 
       <!-- DATAREADY -->
-      <div class="pack-card popular" data-pack="intermediaire" data-price="15 000" onclick="selectPack(this)">
+      <div class="pack-card popular">
         <div class="pack-progress"><div class="pack-progress-fill" style="width:50%"></div></div>
         <div class="pack-price-badge">15 000 FCFA<small>DataReady</small></div>
         <div class="pack-header">
@@ -324,11 +216,11 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
           <li>Dictionnaire des variables et colonnes d'export Kobo</li>
           <li>Plan d'analyse mis à jour à chaque nouvelle version</li>
         </ul>
-        <button class="pack-select-btn" onclick="event.stopPropagation(); selectPack(this.closest('.pack-card'))">Sélectionner ce pack</button>
+        <a class="pack-select-btn" href="TEST_commande.html?pack=intermediaire">Sélectionner ce pack</a>
       </div>
 
       <!-- FORMR PRO -->
-      <div class="pack-card" data-pack="avance" data-price="35 000" onclick="selectPack(this)">
+      <div class="pack-card">
         <div class="pack-progress"><div class="pack-progress-fill" style="width:75%"></div></div>
         <div class="pack-price-badge">35 000 FCFA<small>FormR Pro</small></div>
         <div class="pack-header">
@@ -347,11 +239,11 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
           <li>Fichier de données fictives pour tester les scripts</li>
           <li>Scripts R et dashboard mis à jour selon l'évolution du questionnaire</li>
         </ul>
-        <button class="pack-select-btn" onclick="event.stopPropagation(); selectPack(this.closest('.pack-card'))">Sélectionner ce pack</button>
+        <a class="pack-select-btn" href="TEST_commande.html?pack=avance">Sélectionner ce pack</a>
       </div>
 
       <!-- FORMR PREMIUM -->
-      <div class="pack-card" data-pack="premium" data-price="50 000" onclick="selectPack(this)">
+      <div class="pack-card">
         <div class="pack-progress"><div class="pack-progress-fill" style="width:100%"></div></div>
         <div class="pack-price-badge">50 000 FCFA<small>FormR Premium</small></div>
         <div class="pack-header">
@@ -369,459 +261,23 @@ h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
           <li>Générés à partir de vos TDR et documents de cadrage</li>
           <li>Rapports mis à jour à chaque nouvelle version</li>
         </ul>
-        <button class="pack-select-btn" onclick="event.stopPropagation(); selectPack(this.closest('.pack-card'))">Sélectionner ce pack</button>
+        <a class="pack-select-btn" href="TEST_commande.html?pack=premium">Sélectionner ce pack</a>
       </div>
 
-    </div><!-- /packs-grid -->
+    </div>
 
-    <!-- FORMULAIRE -->
-    <div class="order-form" id="order">
-      <h2>Votre commande</h2>
-      <p class="form-subtitle">Nouvelle commande ou mise à jour d'un questionnaire existant — choisissez votre cas ci-dessous.</p>
+    <div class="update-cta">
+      <p>Vous avez déjà commandé et votre questionnaire a évolué ?</p>
+      <a href="TEST_mise-a-jour.html">🔄 Accéder à la page de mise à jour</a>
+    </div>
 
-      <!-- ONGLETS -->
-      <div class="form-tabs">
-        <button class="form-tab active" id="tab-new" onclick="switchTab('new')">🆕 Nouvelle commande</button>
-        <button class="form-tab" id="tab-update" onclick="switchTab('update')">🔄 Mise à jour (30 jours)</button>
-      </div>
-
-      <!-- ─── PANNEAU NOUVELLE COMMANDE ─── -->
-      <div class="tab-panel active" id="panel-new">
-
-        <div class="selected-pack-recap" id="packRecap">
-          <div class="recap-title">Pack sélectionné</div>
-          <div class="recap-name" id="recapName">—</div>
-          <div class="recap-price" id="recapPrice">—</div>
-          <div class="recap-validity">🔄 Accès 30 jours · mises à jour illimitées incluses</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="clientName">Nom complet <span class="required">*</span></label>
-          <input class="form-input" type="text" id="clientName" placeholder="Ex. Marie Koné" autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="clientEmail">Adresse email <span class="required">*</span></label>
-          <input class="form-input" type="email" id="clientEmail" placeholder="votre@email.com" autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="clientOrg">Organisation / Projet</label>
-          <input class="form-input" type="text" id="clientOrg" placeholder="Ex. Jhpiego — RISE Project">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="questType">Thématique du questionnaire <span class="required">*</span></label>
-          <select class="form-select" id="questType">
-            <option value="">— Sélectionner —</option>
-            <option>WASH (eau, assainissement, hygiène)</option>
-            <option>Santé / VIH / Paludisme / Nutrition</option>
-            <option>Suivi de bénéficiaires</option>
-            <option>Évaluation de formation</option>
-            <option>Monitoring de projet</option>
-            <option>Enquête ménage généraliste</option>
-            <option>Agriculture / Sécurité alimentaire</option>
-            <option>Protection / Genre</option>
-            <option>Autre thématique</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Questionnaire (Word ou Excel) <span class="required">*</span></label>
-          <div class="upload-zone" id="uploadZone">
-            <input type="file" id="fileInput" accept=".docx,.xlsx,.xls,.doc,.pdf" onchange="handleFile(this)">
-            <div class="upload-icon">📄</div>
-            <div class="upload-text">Cliquez ou déposez votre fichier ici</div>
-            <div class="upload-sub">Formats acceptés : .docx, .xlsx, .xls, .doc, .pdf — max 20 Mo</div>
-            <div class="upload-file-name" id="fileName"></div>
-          </div>
-        </div>
-
-        <!-- UPLOAD TDR — visible uniquement pour FormR Premium -->
-        <div class="form-group" id="tdrSection" style="display:none;">
-          <label class="form-label">TDR et documents de cadrage de l'étude <span class="required">*</span></label>
-          <div style="background:#F0F4FF;border-left:4px solid #7C3AED;border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:12px;font-size:.82rem;color:#4C1D95;">
-            <strong>FormR Premium uniquement.</strong> Chargez vos termes de référence, protocole d'étude, cadre logique ou tout document de cadrage. Ces documents guideront la génération des drafts de rapports.
-          </div>
-          <div class="upload-zone" id="uploadZoneTdr" style="border-color:#7C3AED20;">
-            <input type="file" id="fileInputTdr" accept=".docx,.xlsx,.xls,.doc,.pdf" multiple onchange="handleFileTdr(this)">
-            <div class="upload-icon">📋</div>
-            <div class="upload-text" style="color:#7C3AED;">Cliquez ou déposez vos TDR / documents ici</div>
-            <div class="upload-sub">Formats : .docx, .xlsx, .pdf — plusieurs fichiers acceptés — max 20 Mo par fichier</div>
-            <div class="upload-file-name" id="fileNameTdr"></div>
-          </div>
-        </div>
-
-        <!-- OBSERVATIONS INITIALES -->
-        <div class="observations-box">
-          <div class="observations-box-title">💬 Vos observations et instructions</div>
-          <div class="observations-box-sub">Précisez ici tout ce qui doit guider la conversion : sections à ignorer, variables à regrouper, cascade administrative souhaitée, logique conditionnelle particulière, etc.</div>
-          <textarea class="form-textarea" id="instructions" placeholder="Ex. La section 3 contient des questions à choix multiples — garder une modalité par ligne. Ajouter la cascade région > département > sous-préfecture pour la Région des Lacs. La variable Q12 ne doit apparaître que si Q11 = Oui…"></textarea>
-        </div>
-
-        <button class="btn-primary" id="submitBtn" onclick="handleSubmit('new')" disabled>
-          🧪 Lancer le traitement (mode test)
-        </button>
-        <p class="chariow-note">Mode test — aucun paiement · Livraison par email sous 2 heures · Accès 30 jours inclus</p>
-      </div>
-
-      <!-- ─── PANNEAU MISE À JOUR ─── -->
-      <div class="tab-panel" id="panel-update">
-
-        <div class="access-key-info">
-          <span>🔑</span>
-          <div><strong>Clé d'accès requise.</strong> Vous avez reçu votre clé dans l'email de livraison de votre commande initiale. Elle est valable 30 jours à partir de la date d'achat.</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="accessKey">Clé d'accès <span class="required">*</span></label>
-          <input class="form-input" type="text" id="accessKey" placeholder="Ex. XLSF-2026-XXXX-XXXX" autocomplete="off" style="letter-spacing:.05em; font-family: monospace; font-size: .92rem;">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="updateEmail">Email utilisé lors de la commande <span class="required">*</span></label>
-          <input class="form-input" type="email" id="updateEmail" placeholder="votre@email.com" autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Questionnaire mis à jour (Word ou Excel) <span class="required">*</span></label>
-          <div class="upload-zone" id="uploadZoneUpdate">
-            <input type="file" id="fileInputUpdate" accept=".docx,.xlsx,.xls,.doc,.pdf" onchange="handleFileUpdate(this)">
-            <div class="upload-icon">📄</div>
-            <div class="upload-text">Déposez la nouvelle version de votre questionnaire</div>
-            <div class="upload-sub">La version précédente sera remplacée par celle-ci</div>
-            <div class="upload-file-name" id="fileNameUpdate"></div>
-          </div>
-        </div>
-
-        <!-- OBSERVATIONS DE MISE À JOUR -->
-        <div class="observations-box">
-          <div class="observations-box-title">💬 Qu'est-ce qui a changé ? Vos observations</div>
-          <div class="observations-box-sub">Décrivez les modifications apportées et toute instruction pour mettre à jour les livrables en conséquence. Ces observations seront transmises à Claude pour guider la régénération.</div>
-          <textarea class="form-textarea" id="updateObservations" placeholder="Ex. J'ai ajouté une nouvelle section sur la gestion des déchets (questions Q45 à Q52). La question Q18 a été divisée en deux sous-questions. Corriger aussi le libellé de Q7 qui avait une coquille. Les scripts R doivent inclure la nouvelle section dans l'analyse bivariée…" style="min-height:130px;"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="updateVersion">Numéro de version (optionnel)</label>
-          <input class="form-input" type="text" id="updateVersion" placeholder="Ex. v2.1 — Révision post-test terrain">
-        </div>
-
-        <button class="btn-primary btn-update" id="updateBtn" onclick="handleSubmit('update')" disabled>
-          🔄 Envoyer la mise à jour
-        </button>
-        <p class="chariow-note">Gratuit pendant les 30 jours d'accès · Livraison du ZIP mis à jour sous 2 heures</p>
-      </div>
-
-    </div><!-- /order-form -->
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
   <p><strong>Irié Armand Davy TRE BI</strong> — Digital Health & Data Analyst · Jhpiego/RISE · Abidjan, Côte d'Ivoire</p>
   <p style="margin-top:6px">armanddavy7@gmail.com · <a href="https://linkedin.com/in/tre-bi" style="color:var(--orange)">LinkedIn</a> · <a href="https://github.com/trebi7" style="color:var(--orange)">GitHub</a></p>
 </footer>
 
-<!-- LOADER -->
-<div class="loader-overlay" id="loader">
-  <div class="loader-spinner"></div>
-  <div class="loader-text" id="loaderText">Traitement de votre commande en cours…</div>
-  <div class="loader-steps">
-    <div class="loader-step" id="step1"><span class="loader-step-icon">📄</span>Lecture du questionnaire</div>
-    <div class="loader-step" id="step2"><span class="loader-step-icon">🔄</span>Conversion en XLSForm</div>
-    <div class="loader-step" id="step3"><span class="loader-step-icon">✅</span>Validation pyxform</div>
-    <div class="loader-step" id="step4"><span class="loader-step-icon">📦</span>Création du fichier ZIP</div>
-    <div class="loader-step" id="step5"><span class="loader-step-icon">📧</span>Envoi par email</div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-
-<script>
-// ── CONFIGURATION ────────────────────────────────────────────────────
-const CONFIG = {
-  N8N_WEBHOOK_URL:        "https://davy77.app.n8n.cloud/webhook/xlsform-order-essai",
-  N8N_WEBHOOK_UPDATE_URL: "https://davy77.app.n8n.cloud/webhook/xlsform-update",
-  MAX_FILE_MB: 20,
-};
-
-const PACK_LABELS = {
-  standard:     "KoboConvert — XLSForm prêt à importer",
-  intermediaire:"DataReady — XLSForm + Plan d'analyse",
-  avance:       "FormR Pro — XLSForm + Plan d'analyse + Scripts R + Shiny",
-  premium:      "FormR Premium — Livrable complet + Drafts rapports d'étude",
-};
-
-// ── ÉTAT ─────────────────────────────────────────────────────────────
-let selectedPack  = null;
-let uploadedFile  = null;
-let uploadedFileTdr = [];   // multi-fichiers TDR
-let uploadedFileU = null;
-let activeTab     = 'new';
-
-// ── ONGLETS ──────────────────────────────────────────────────────────
-function switchTab(tab) {
-  activeTab = tab;
-  document.getElementById('tab-new').classList.toggle('active', tab === 'new');
-  document.getElementById('tab-update').classList.toggle('active', tab === 'update');
-  document.getElementById('panel-new').classList.toggle('active', tab === 'new');
-  document.getElementById('panel-update').classList.toggle('active', tab === 'update');
-}
-
-// ── SÉLECTION PACK ───────────────────────────────────────────────────
-function selectPack(card) {
-  document.querySelectorAll(".pack-card").forEach(c => c.classList.remove("selected"));
-  card.classList.add("selected");
-  selectedPack = card.dataset.pack;
-  const recap = document.getElementById("packRecap");
-  document.getElementById("recapName").textContent  = PACK_LABELS[selectedPack];
-  document.getElementById("recapPrice").textContent = card.dataset.price + " FCFA";
-  recap.classList.add("visible");
-  // Afficher la section TDR uniquement pour FormR Premium
-  const tdrSection = document.getElementById("tdrSection");
-  tdrSection.style.display = selectedPack === 'premium' ? 'block' : 'none';
-  checkReady();
-  document.getElementById("order").scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-// ── UPLOAD ───────────────────────────────────────────────────────────
-function handleFile(input) {
-  const f = input.files[0]; if (!f) return;
-  if (!validateFileType(f)) { showToast("Format non supporté. Utilisez .docx, .xlsx, .xls, .doc ou .pdf.", "error"); input.value = ""; return; }
-  if (f.size > CONFIG.MAX_FILE_MB * 1024 * 1024) { showToast("Fichier trop volumineux (max " + CONFIG.MAX_FILE_MB + " Mo).", "error"); input.value = ""; return; }
-  uploadedFile = f;
-  setFileLabel("fileName", f);
-  document.getElementById("uploadZone").style.borderColor = "var(--succes)";
-  checkReady();
-}
-function handleFileUpdate(input) {
-  const f = input.files[0]; if (!f) return;
-  if (!validateFileType(f)) { showToast("Format non supporté.", "error"); input.value = ""; return; }
-  if (f.size > CONFIG.MAX_FILE_MB * 1024 * 1024) { showToast("Fichier trop volumineux.", "error"); input.value = ""; return; }
-  uploadedFileU = f;
-  setFileLabel("fileNameUpdate", f);
-  document.getElementById("uploadZoneUpdate").style.borderColor = "var(--succes)";
-  checkUpdateReady();
-}
-function validateFileType(f) { return ["docx","xlsx","xls","doc","pdf"].includes(f.name.split(".").pop().toLowerCase()); }
-
-function handleFileTdr(input) {
-  const files = Array.from(input.files);
-  if (!files.length) return;
-  const valid = ["docx","xlsx","xls","doc","pdf"];
-  const tooBig = files.filter(f => f.size > CONFIG.MAX_FILE_MB * 1024 * 1024);
-  const badType = files.filter(f => !valid.includes(f.name.split(".").pop().toLowerCase()));
-  if (badType.length) { showToast("Format non supporté dans les TDR. Utilisez .docx, .xlsx, .pdf ou .doc.", "error"); return; }
-  if (tooBig.length) { showToast("Un ou plusieurs fichiers dépassent 20 Mo.", "error"); return; }
-  uploadedFileTdr = files;
-  const fn = document.getElementById("fileNameTdr");
-  fn.textContent = "✓ " + files.length + " fichier" + (files.length > 1 ? "s" : "") + " chargé" + (files.length > 1 ? "s" : "") + " : " + files.map(f => f.name).join(", ");
-  fn.style.display = "block";
-  document.getElementById("uploadZoneTdr").style.borderColor = "var(--succes)";
-  checkReady();
-}
-
-// Drag & drop TDR
-const zoneTdr = document.getElementById("uploadZoneTdr");
-["dragenter","dragover"].forEach(e => zoneTdr.addEventListener(e, ev => { ev.preventDefault(); zoneTdr.classList.add("dragover"); }));
-["dragleave","drop"].forEach(e => zoneTdr.addEventListener(e, ev => {
-  ev.preventDefault(); zoneTdr.classList.remove("dragover");
-  if (e === "drop" && ev.dataTransfer.files.length) {
-    const dt = new DataTransfer();
-    Array.from(ev.dataTransfer.files).forEach(f => dt.items.add(f));
-    document.getElementById("fileInputTdr").files = dt.files;
-    handleFileTdr(document.getElementById("fileInputTdr"));
-  }
-}));
-function setFileLabel(id, f) {
-  const el = document.getElementById(id);
-  el.textContent = "✓ " + f.name + " (" + (f.size / 1024).toFixed(0) + " Ko)";
-  el.style.display = "block";
-}
-
-// Drag & drop — nouvelle commande
-const zone = document.getElementById("uploadZone");
-["dragenter","dragover"].forEach(e => zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add("dragover"); }));
-["dragleave","drop"].forEach(e => zone.addEventListener(e, ev => {
-  ev.preventDefault(); zone.classList.remove("dragover");
-  if (e === "drop" && ev.dataTransfer.files.length) {
-    const dt = new DataTransfer(); dt.items.add(ev.dataTransfer.files[0]);
-    document.getElementById("fileInput").files = dt.files;
-    handleFile(document.getElementById("fileInput"));
-  }
-}));
-// Drag & drop — mise à jour
-const zoneU = document.getElementById("uploadZoneUpdate");
-["dragenter","dragover"].forEach(e => zoneU.addEventListener(e, ev => { ev.preventDefault(); zoneU.classList.add("dragover"); }));
-["dragleave","drop"].forEach(e => zoneU.addEventListener(e, ev => {
-  ev.preventDefault(); zoneU.classList.remove("dragover");
-  if (e === "drop" && ev.dataTransfer.files.length) {
-    const dt = new DataTransfer(); dt.items.add(ev.dataTransfer.files[0]);
-    document.getElementById("fileInputUpdate").files = dt.files;
-    handleFileUpdate(document.getElementById("fileInputUpdate"));
-  }
-}));
-
-// ── VALIDATION ───────────────────────────────────────────────────────
-function checkReady() {
-  const tdrOk = selectedPack !== 'premium' || uploadedFileTdr.length > 0;
-  const ok = selectedPack && uploadedFile && tdrOk
-    && document.getElementById("clientName").value.trim()
-    && validateEmail(document.getElementById("clientEmail").value.trim())
-    && document.getElementById("questType").value;
-  document.getElementById("submitBtn").disabled = !ok;
-}
-function checkUpdateReady() {
-  const ok = uploadedFileU
-    && document.getElementById("accessKey").value.trim().length > 6
-    && validateEmail(document.getElementById("updateEmail").value.trim());
-  document.getElementById("updateBtn").disabled = !ok;
-}
-function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
-
-["clientName","clientEmail","questType"].forEach(id => document.getElementById(id).addEventListener("input", checkReady));
-["accessKey","updateEmail"].forEach(id => document.getElementById(id).addEventListener("input", checkUpdateReady));
-
-// ── SOUMISSION ───────────────────────────────────────────────────────
-async function handleSubmit(mode) {
-  if (mode === 'new') await submitNew();
-  else await submitUpdate();
-}
-
-async function submitNew() {
-  if (!selectedPack || !uploadedFile) return;
-  const name  = document.getElementById("clientName").value.trim();
-  const email = document.getElementById("clientEmail").value.trim();
-  if (!validateEmail(email)) { showToast("Email invalide.", "error"); return; }
-
-  document.getElementById("loaderText").textContent = "Traitement de votre commande…";
-  showLoader();
-  try {
-    setStep(1, "active");
-    const fileB64 = await toBase64(uploadedFile);
-    setStep(1, "done"); setStep(2, "active");
-
-    // Encoder les TDR en base64 si pack Premium
-    let tdrFiles = [];
-    if (selectedPack === 'premium' && uploadedFileTdr.length > 0) {
-      tdrFiles = await Promise.all(uploadedFileTdr.map(async f => ({
-        name: f.name, size: f.size, type: f.type, data_b64: await toBase64(f)
-      })));
-    }
-
-    const payload = {
-      mode: "new",
-      pack: selectedPack,
-      pack_label: PACK_LABELS[selectedPack],
-      client: { name, email, org: document.getElementById("clientOrg").value.trim() },
-      questionnaire_type: document.getElementById("questType").value,
-      observations: document.getElementById("instructions").value.trim(),
-      file: { name: uploadedFile.name, size: uploadedFile.size, type: uploadedFile.type, data_b64: fileB64 },
-      tdr_files: tdrFiles,
-      submitted_at: new Date().toISOString(),
-      access_duration_days: 30,
-    };
-
-    // Mode test : appel direct au webhook n8n, sans paiement ni redirection.
-    let webhookOk = true;
-    try {
-      const resp = await fetch(CONFIG.N8N_WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      webhookOk = resp.ok;
-      if (!resp.ok) console.warn("Webhook n8n a répondu HTTP " + resp.status);
-    } catch (webhookErr) {
-      webhookOk = false;
-      console.warn("Webhook n8n injoignable :", webhookErr);
-    }
-    setStep(2, "done");
-
-    await wait(500); setStep(3, "active");
-    await wait(500); setStep(3, "done"); setStep(4, "active");
-    await wait(400); setStep(4, "done"); setStep(5, "active");
-    await wait(400); setStep(5, "done");
-    hideLoader();
-
-    if (!webhookOk) {
-      showToast("Erreur : le workflow n'a pas pu être déclenché. Réessayez.", "error");
-    } else {
-      showToast("Traitement lancé ! Vous recevrez le ZIP par email sous peu.", "success");
-    }
-  } catch(err) {
-    hideLoader(); console.error(err);
-    showToast("Une erreur est survenue. Écrivez à armanddavy7@gmail.com.", "error");
-  }
-}
-
-async function submitUpdate() {
-  if (!uploadedFileU) return;
-  const email = document.getElementById("updateEmail").value.trim();
-  const key   = document.getElementById("accessKey").value.trim();
-  if (!validateEmail(email)) { showToast("Email invalide.", "error"); return; }
-
-  document.getElementById("loaderText").textContent = "Envoi de la mise à jour en cours…";
-  showLoader();
-  try {
-    setStep(1, "active");
-    const fileB64 = await toBase64(uploadedFileU);
-    setStep(1, "done"); setStep(2, "active");
-
-    const payload = {
-      mode: "update",
-      access_key: key,
-      client_email: email,
-      observations: document.getElementById("updateObservations").value.trim(),
-      version_label: document.getElementById("updateVersion").value.trim(),
-      file: { name: uploadedFileU.name, size: uploadedFileU.size, type: uploadedFileU.type, data_b64: fileB64 },
-      submitted_at: new Date().toISOString(),
-    };
-
-    const resp = await fetch(CONFIG.N8N_WEBHOOK_UPDATE_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    setStep(2, "done");
-    if (!resp.ok) throw new Error("HTTP " + resp.status);
-
-    await wait(800); setStep(3, "active");
-    await wait(700); setStep(3, "done"); setStep(4, "active");
-    await wait(600); setStep(4, "done"); setStep(5, "active");
-    await wait(500); setStep(5, "done");
-    hideLoader();
-    showToast("Mise à jour envoyée ! Vous recevrez le ZIP actualisé sous 2 heures.", "success");
-
-    document.getElementById("updateObservations").value = "";
-    document.getElementById("updateVersion").value = "";
-  } catch(err) {
-    hideLoader(); console.error(err);
-    showToast("Une erreur est survenue. Écrivez à armanddavy7@gmail.com.", "error");
-  }
-}
-
-// ── UTILITAIRES ──────────────────────────────────────────────────────
-function toBase64(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(",")[1]);
-    r.onerror = () => rej(new Error("Lecture impossible."));
-    r.readAsDataURL(file);
-  });
-}
-function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function showLoader() {
-  document.querySelectorAll(".loader-step").forEach(s => s.classList.remove("active","done"));
-  document.getElementById("loader").classList.add("active");
-}
-function hideLoader() { document.getElementById("loader").classList.remove("active"); }
-function setStep(n, state) {
-  const el = document.getElementById("step" + n);
-  el.classList.remove("active","done");
-  if (state) el.classList.add(state);
-}
-
-let toastTimer;
-function showToast(msg, type = "success") {
-  const t = document.getElementById("toast");
-  t.textContent = (type === "error" ? "⚠ " : "✓ ") + msg;
-  t.className = "toast " + (type === "error" ? "error" : "") + " show";
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove("show"), 5500);
-}
-</script>
 </body>
 </html>
