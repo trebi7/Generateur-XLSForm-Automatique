@@ -3,281 +3,431 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧪</text></svg>">
-
-<title>🧪 TEST — XLSForm Pro — Convertisseur de questionnaires KoboToolbox</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Générateur XLSForm Automatique</title>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bleu:        #0D3B66;
-  --bleu-clair:  #E8F1F8;
-  --bleu-mid:    #1B5497;
-  --orange:      #F4A261;
-  --orange-dark: #E07A3A;
-  --fond:        #F7F9FC;
-  --texte:       #1A1A2E;
-  --gris:        #6B7280;
-  --blanc:       #FFFFFF;
-  --succes:      #059669;
-  --violet:      #7C3AED;
-  --violet-clair:#EDE9FE;
-  --radius:      12px;
-  --shadow:      0 4px 24px rgba(13,59,102,.10);
-  --shadow-hover:0 8px 32px rgba(13,59,102,.18);
-  --transition:  .22s cubic-bezier(.4,0,.2,1);
-}
-html { scroll-behavior: smooth; }
-body { font-family: 'Inter', sans-serif; background: var(--fond); color: var(--texte); line-height: 1.6; min-height: 100vh; }
-h1,h2,h3,h4 { font-family: 'Sora', sans-serif; line-height: 1.2; }
-h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; }
-h2 { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 700; }
-.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  :root{
+    --primary:#1565c0;
+    --primary-dark:#0d47a1;
+    --success:#2e7d32;
+    --success-bg:#e8f5e9;
+    --error:#c62828;
+    --error-bg:#ffebee;
+    --border:#dfe3e8;
+    --text:#263238;
+    --muted:#6b7785;
+    --bg:#f4f6f8;
+    --card:#ffffff;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(180deg,#eef3fb 0%,var(--bg) 320px);
+    color:var(--text);
+    min-height:100vh;
+    padding:32px 16px 64px;
+  }
+  .wrap{max-width:640px;margin:0 auto;}
+  header{text-align:center;margin-bottom:28px;}
+  header h1{font-size:1.6rem;margin:0 0 8px;color:var(--primary-dark);}
+  header p{color:var(--muted);font-size:0.95rem;line-height:1.5;margin:0;}
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:0 4px 24px rgba(20,40,80,0.08);
+    padding:28px 24px;
+  }
+  .field{margin-bottom:22px;}
+  label{
+    display:block;
+    font-weight:600;
+    font-size:0.92rem;
+    margin-bottom:6px;
+  }
+  .required::after{content:" *";color:var(--error);}
+  .hint{font-size:0.8rem;color:var(--muted);margin-top:4px;}
+  input[type="text"],input[type="email"],textarea{
+    width:100%;
+    padding:11px 13px;
+    border:1.5px solid var(--border);
+    border-radius:8px;
+    font-size:0.95rem;
+    font-family:inherit;
+    transition:border-color .15s, box-shadow .15s;
+    background:#fbfcfe;
+  }
+  textarea{resize:vertical;min-height:80px;}
+  input:focus,textarea:focus{
+    outline:none;
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(21,101,192,0.14);
+    background:#fff;
+  }
+  input.invalid,textarea.invalid,.dropzone.invalid{
+    border-color:var(--error) !important;
+    box-shadow:0 0 0 3px rgba(198,40,40,0.12) !important;
+  }
+  .error-msg{
+    display:none;
+    color:var(--error);
+    font-size:0.82rem;
+    margin-top:5px;
+    font-weight:500;
+  }
+  .field.has-error .error-msg{display:block;}
 
-/* NAV */
-.nav { background: var(--bleu); padding: 16px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.2); }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; }
-.nav-logo { color: var(--blanc); font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 800; display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo span { background: var(--orange); color: var(--bleu); font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
-.nav-link { color: rgba(255,255,255,.75); text-decoration: none; font-size: .88rem; font-weight: 500; transition: color var(--transition); }
-.nav-link:hover { color: var(--orange); }
+  .dropzone{
+    border:2px dashed var(--border);
+    border-radius:10px;
+    padding:22px 16px;
+    text-align:center;
+    cursor:pointer;
+    background:#fbfcfe;
+    transition:border-color .15s, background .15s;
+    position:relative;
+  }
+  .dropzone.dragover{
+    border-color:var(--primary);
+    background:#eef5ff;
+  }
+  .dropzone .dz-icon{font-size:1.8rem;margin-bottom:6px;}
+  .dropzone .dz-main{font-weight:600;font-size:0.92rem;}
+  .dropzone .dz-sub{font-size:0.8rem;color:var(--muted);margin-top:4px;}
+  .dropzone input[type="file"]{
+    position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+  }
+  .file-preview{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    background:#eef5ff;
+    border:1.5px solid var(--primary);
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:10px;
+    font-size:0.88rem;
+  }
+  .file-preview.show{display:flex;}
+  .file-preview .fp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+  .file-preview button{
+    border:none;background:none;color:var(--error);cursor:pointer;font-size:0.85rem;font-weight:600;
+    padding:4px 8px;
+  }
 
-/* HERO */
-.hero { background: linear-gradient(135deg, var(--bleu) 0%, var(--bleu-mid) 100%); padding: 72px 0 80px; position: relative; overflow: hidden; }
-.hero::before { content: ''; position: absolute; right: -120px; top: -80px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(244,162,97,.15) 0%, transparent 70%); pointer-events: none; }
-.hero-inner { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; }
-.hero-text { flex: 1; min-width: 280px; }
-.hero-eyebrow { color: var(--orange); font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 16px; }
-.hero h1 { color: var(--blanc); margin-bottom: 20px; }
-.hero h1 em { color: var(--orange); font-style: normal; border-bottom: 3px solid var(--orange); }
-.hero-sub { color: rgba(255,255,255,.78); font-size: 1.05rem; margin-bottom: 8px; max-width: 520px; }
-.hero-visual { width: 220px; height: 220px; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.15); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; flex-shrink: 0; }
-.hero-icon { font-size: 4rem; }
-.hero-visual-label { color: rgba(255,255,255,.7); font-size: .78rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+  .char-count{font-size:0.78rem;color:var(--muted);text-align:right;margin-top:4px;}
 
-/* HOW */
-.how { padding: 64px 0; }
-.section-title { text-align: center; margin-bottom: 12px; color: var(--bleu); }
-.section-sub { text-align: center; color: var(--gris); margin-bottom: 48px; font-size: .95rem; }
-.steps { display: flex; gap: 0; justify-content: center; flex-wrap: wrap; }
-.step { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; min-width: 160px; max-width: 210px; padding: 24px 12px; position: relative; }
-.step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 36px; font-size: 1.4rem; color: var(--orange); font-weight: 700; }
-.step-num { width: 52px; height: 52px; background: var(--bleu); color: var(--blanc); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 800; margin-bottom: 14px; flex-shrink: 0; }
-.step-title { font-weight: 700; font-size: .9rem; color: var(--bleu); margin-bottom: 5px; }
-.step-desc { font-size: .8rem; color: var(--gris); }
+  button.submit-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:9px;
+    background:var(--primary);
+    color:#fff;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .15s, transform .1s;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  button.submit-btn:hover{background:var(--primary-dark);}
+  button.submit-btn:active{transform:scale(0.99);}
+  button.submit-btn:disabled{background:#9fb3c8;cursor:not-allowed;}
 
-/* PACKS */
-.packs-section { padding: 24px 0 80px; }
-.packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
-.pack-card { background: var(--blanc); border-radius: var(--radius); box-shadow: var(--shadow); padding: 0; position: relative; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); border: 2px solid transparent; overflow: hidden; }
-.pack-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--orange); }
-.pack-progress { height: 5px; background: var(--bleu-clair); }
-.pack-progress-fill { height: 100%; background: linear-gradient(90deg, var(--bleu-mid), var(--orange)); }
-.pack-price-badge { position: absolute; top: 20px; right: 20px; background: var(--orange); color: var(--bleu); font-family: 'Sora', sans-serif; font-weight: 800; font-size: .85rem; padding: 6px 14px; border-radius: 99px; line-height: 1.2; text-align: center; white-space: nowrap; }
-.pack-price-badge small { display: block; font-size: .6rem; font-weight: 600; opacity: .75; }
-.pack-header { padding: 24px 24px 12px; }
-.pack-label { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gris); margin-bottom: 4px; }
-.pack-name { font-family: 'Sora', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--bleu); margin-bottom: 6px; }
-.pack-tagline { font-size: .82rem; color: var(--gris); line-height: 1.4; }
-.pack-abonnement { margin: 0 24px 10px; background: var(--violet-clair); color: var(--violet); font-size: .72rem; font-weight: 700; padding: 5px 12px; border-radius: 6px; display: flex; align-items: center; gap: 6px; }
-.pack-deliverables { padding: 0 24px 16px; list-style: none; display: flex; flex-direction: column; gap: 7px; }
-.pack-deliverables li { display: flex; align-items: flex-start; gap: 8px; font-size: .82rem; color: var(--texte); line-height: 1.4; }
-.pack-deliverables li::before { content: '✓'; color: var(--succes); font-weight: 700; font-size: .88rem; flex-shrink: 0; margin-top: 1px; }
-.pack-deliverables li.inherited { color: var(--gris); font-size: .78rem; }
-.pack-deliverables li.inherited::before { content: '↳'; color: #B0C4D8; font-size: .78rem; }
-.pack-divider { margin: 4px 0; height: 1px; background: var(--bleu-clair); }
-.pack-select-btn { display: block; text-decoration: none; margin: 0 24px 20px; width: calc(100% - 48px); padding: 12px 0; background: var(--bleu); color: var(--blanc); border: 2px solid var(--bleu); border-radius: 8px; font-family: 'Sora', sans-serif; font-weight: 700; font-size: .87rem; cursor: pointer; transition: all var(--transition); text-align: center; }
-.pack-select-btn:hover { background: var(--bleu-mid); border-color: var(--bleu-mid); transform: translateY(-1px); }
-.pack-card.popular::before { content: '⭐ Populaire'; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--bleu); color: var(--orange); font-size: .68rem; font-weight: 700; padding: 4px 16px; border-radius: 0 0 8px 8px; letter-spacing: .05em; z-index: 1; }
+  .spinner{
+    width:18px;height:18px;border-radius:50%;
+    border:2.5px solid rgba(255,255,255,0.4);
+    border-top-color:#fff;
+    animation:spin .7s linear infinite;
+    display:none;
+  }
+  .spinner.show{display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
-/* UPDATE CTA */
-.update-cta { text-align: center; margin-top: 48px; padding: 28px; background: var(--violet-clair); border-radius: var(--radius); }
-.update-cta p { color: #4C1D95; font-size: .9rem; margin-bottom: 12px; }
-.update-cta a { display: inline-block; background: var(--violet); color: #fff; text-decoration: none; padding: 10px 24px; border-radius: 8px; font-family: 'Sora', sans-serif; font-weight: 700; font-size: .85rem; transition: background var(--transition); }
-.update-cta a:hover { background: #6D28D9; }
+  .banner{
+    display:none;
+    border-radius:10px;
+    padding:16px 18px;
+    margin-bottom:20px;
+    font-size:0.92rem;
+    line-height:1.5;
+  }
+  .banner.show{display:block;}
+  .banner.success{background:var(--success-bg);color:var(--success);border:1px solid #a5d6a7;}
+  .banner.error{background:var(--error-bg);color:var(--error);border:1px solid #ef9a9a;}
+  .banner strong{display:block;margin-bottom:4px;font-size:0.98rem;}
 
-/* FOOTER */
-.footer { background: var(--bleu); color: rgba(255,255,255,.6); text-align: center; padding: 28px 24px; font-size: .8rem; margin-top: 40px; }
-.footer strong { color: var(--blanc); }
+  footer{text-align:center;margin-top:24px;color:var(--muted);font-size:0.78rem;}
 
-@media (max-width: 640px) {
-  .packs-grid { grid-template-columns: 1fr; }
-  .hero-inner { flex-direction: column; gap: 32px; }
-  .hero-visual { width: 100%; height: 140px; flex-direction: row; }
-  .steps { gap: 16px; }
-  .step:not(:last-child)::after { display: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-}
+  @media (max-width:480px){
+    .card{padding:22px 16px;}
+    header h1{font-size:1.35rem;}
+  }
 </style>
 </head>
 <body>
+<div class="wrap">
+  <header>
+    <h1>Générateur XLSForm Automatique</h1>
+    <p>Collez ou déposez votre questionnaire. Nous analyserons sa structure et produirons un fichier XLSForm prêt à déployer sur KoboToolbox ou toute autre plateforme de base ODK.</p>
+  </header>
 
-<div style="background:repeating-linear-gradient(45deg,#7C3AED,#7C3AED 12px,#6D28D9 12px,#6D28D9 24px);color:#fff;text-align:center;padding:8px;font-family:'Sora',sans-serif;font-weight:800;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;">🧪 MODE TEST — Aucun paiement Chariow</div>
-
-<nav class="nav">
-  <div class="container nav-inner">
-    <a href="TEST_index.html" class="nav-logo">📋 XLSForm Pro <span>by Armand TRE BI</span></a>
-    <a href="#packs" class="nav-link">Voir les packs →</a>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="container">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <p class="hero-eyebrow">Spécialiste KoboToolbox · Afrique francophone</p>
-        <h1>Votre questionnaire Word ou Excel<br>en <em>XLSForm prêt à déployer</em></h1>
-        <p class="hero-sub">Gagnez des jours de travail. Chargez votre fichier, payez en ligne, recevez un XLSForm validé — et rechargez autant de fois que vous voulez pendant 30 jours si votre questionnaire évolue.</p>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-icon">📋</div>
-        <div class="hero-visual-label">Word / Excel → XLSForm</div>
-      </div>
+  <div class="card">
+    <div id="banner-success" class="banner success">
+      <strong>Questionnaire envoyé !</strong>
+      <span id="banner-success-text"></span>
     </div>
-  </div>
-</section>
-
-<section class="how">
-  <div class="container">
-    <h2 class="section-title">Comment ça marche</h2>
-    <p class="section-sub">Première commande ou mise à jour — même simplicité.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-title">Choisissez votre pack</div>
-        <div class="step-desc">KoboConvert, DataReady, FormR Pro ou FormR Premium.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-title">Chargez et payez</div>
-        <div class="step-desc">Déposez votre questionnaire, payez sur Chariow — vous recevez une clé d'accès.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-title">Recevez votre ZIP</div>
-        <div class="step-desc">Tous vos livrables par email sous 2 heures.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-title">Mettez à jour</div>
-        <div class="step-desc">Questionnaire modifié ? Rechargez avec votre clé et notez vos observations.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="packs-section" id="packs">
-  <div class="container">
-    <h2 class="section-title">Choisissez votre pack</h2>
-    <p class="section-sub">Chaque pack ouvre sa propre page de commande, adaptée à ce qu'il inclut.</p>
-
-    <div class="packs-grid">
-
-      <!-- KOBOCONVERT -->
-      <div class="pack-card">
-        <div class="pack-progress"><div class="pack-progress-fill" style="width:25%"></div></div>
-        <div class="pack-price-badge">7 000 FCFA<small>KoboConvert</small></div>
-        <div class="pack-header">
-          <div class="pack-label">Pack 1</div>
-          <div class="pack-name">KoboConvert</div>
-          <div class="pack-tagline">Votre questionnaire Word ou Excel transformé en XLSForm prêt à déployer sur KoboToolbox.</div>
-        </div>
-        <div class="pack-abonnement">🔄 Accès 30 jours — mises à jour incluses</div>
-        <ul class="pack-deliverables">
-          <li>XLSForm (.xlsx) prêt à importer dans KoboToolbox ou ODK</li>
-          <li>Validation automatique — zéro erreur garantie à l'import</li>
-          <li>Sauts conditionnels et contraintes de saisie inclus</li>
-          <li>Guide d'import KoboToolbox (PDF 4 pages)</li>
-          <li>Tout livré en fichier ZIP par email</li>
-          <li>Mises à jour illimitées pendant 30 jours</li>
-        </ul>
-        <a class="pack-select-btn" href="TEST_commande.html?pack=standard">Sélectionner ce pack</a>
-      </div>
-
-      <!-- DATAREADY -->
-      <div class="pack-card popular">
-        <div class="pack-progress"><div class="pack-progress-fill" style="width:50%"></div></div>
-        <div class="pack-price-badge">15 000 FCFA<small>DataReady</small></div>
-        <div class="pack-header">
-          <div class="pack-label">Pack 2</div>
-          <div class="pack-name">DataReady</div>
-          <div class="pack-tagline">Le XLSForm validé plus un plan d'analyse structuré sur vos propres indicateurs — prêt à collecter et à analyser.</div>
-        </div>
-        <div class="pack-abonnement">🔄 Accès 30 jours — mises à jour incluses</div>
-        <ul class="pack-deliverables">
-          <li class="inherited">Tout KoboConvert</li>
-          <div class="pack-divider"></div>
-          <li>Plan d'analyse (Word) basé sur votre questionnaire</li>
-          <li>Mode de calcul de chaque indicateur clé</li>
-          <li>Tableau de bord indicateurs au format Excel</li>
-          <li>Dictionnaire des variables et colonnes d'export Kobo</li>
-          <li>Plan d'analyse mis à jour à chaque nouvelle version</li>
-        </ul>
-        <a class="pack-select-btn" href="TEST_commande.html?pack=intermediaire">Sélectionner ce pack</a>
-      </div>
-
-      <!-- FORMR PRO -->
-      <div class="pack-card">
-        <div class="pack-progress"><div class="pack-progress-fill" style="width:75%"></div></div>
-        <div class="pack-price-badge">35 000 FCFA<small>FormR Pro</small></div>
-        <div class="pack-header">
-          <div class="pack-label">Pack 3</div>
-          <div class="pack-name">FormR Pro</div>
-          <div class="pack-tagline">De la collecte à l'analyse complète : XLSForm, plan d'analyse, 3 scripts R et dashboard Shiny de suivi.</div>
-        </div>
-        <div class="pack-abonnement">🔄 Accès 30 jours — mises à jour incluses</div>
-        <ul class="pack-deliverables">
-          <li class="inherited">Tout DataReady</li>
-          <div class="pack-divider"></div>
-          <li>Script R — suivi en temps réel de la collecte</li>
-          <li>Script R — apurement automatisé (manquants, outliers, doublons)</li>
-          <li>Script R — analyse statistique complète (uni-, bivariée, JMP)</li>
-          <li>Dashboard Shiny — suivi interactif de la collecte (complétude, alertes, cartographie)</li>
-          <li>Fichier de données fictives pour tester les scripts</li>
-          <li>Scripts R et dashboard mis à jour selon l'évolution du questionnaire</li>
-        </ul>
-        <a class="pack-select-btn" href="TEST_commande.html?pack=avance">Sélectionner ce pack</a>
-      </div>
-
-      <!-- FORMR PREMIUM -->
-      <div class="pack-card">
-        <div class="pack-progress"><div class="pack-progress-fill" style="width:100%"></div></div>
-        <div class="pack-price-badge">50 000 FCFA<small>FormR Premium</small></div>
-        <div class="pack-header">
-          <div class="pack-label">Pack 4</div>
-          <div class="pack-name">FormR Premium</div>
-          <div class="pack-tagline">Tout FormR Pro plus les drafts de rapports d'étude complets générés à partir de vos TDR et documents.</div>
-        </div>
-        <div class="pack-abonnement">🔄 Accès 30 jours — mises à jour incluses</div>
-        <ul class="pack-deliverables">
-          <li class="inherited">Tout FormR Pro (XLSForm + Analyse + Scripts R + Shiny)</li>
-          <div class="pack-divider"></div>
-          <li>Draft rapport de collecte de données (Word)</li>
-          <li>Draft rapport d'analyse des données (Word)</li>
-          <li>Draft rapport final de l'étude (Word) — structure bailleur</li>
-          <li>Générés à partir de vos TDR et documents de cadrage</li>
-          <li>Rapports mis à jour à chaque nouvelle version</li>
-        </ul>
-        <a class="pack-select-btn" href="TEST_commande.html?pack=premium">Sélectionner ce pack</a>
-      </div>
-
+    <div id="banner-error" class="banner error">
+      <strong>Une erreur est survenue</strong>
+      <span id="banner-error-text"></span>
     </div>
 
-    <div class="update-cta">
-      <p>Vous avez déjà commandé et votre questionnaire a évolué ?</p>
-      <a href="TEST_mise-a-jour.html">🔄 Accéder à la page de mise à jour</a>
-    </div>
+    <form id="questionnaire-form" novalidate>
 
+      <div class="field" id="field-nom_projet">
+        <label for="nom_projet" class="required">Nom du projet / de l'enquête</label>
+        <input type="text" id="nom_projet" name="nom_projet" maxlength="150" autocomplete="off" placeholder="Ex : Enquête ménages 2026">
+        <div class="error-msg">Merci d'indiquer le nom du projet.</div>
+      </div>
+
+      <div class="field" id="field-questionnaire_file">
+        <label class="required">Questionnaire (Word .docx, Excel .xlsx/.xls, ou PDF .pdf)</label>
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Sélectionner un fichier questionnaire">
+          <div class="dz-icon">📄</div>
+          <div class="dz-main">Cliquez pour choisir un fichier ou glissez-le ici</div>
+          <div class="dz-sub">.docx, .xlsx, .xls ou .pdf — 20 Mo max</div>
+          <input type="file" id="questionnaire_file" name="questionnaire_file" accept=".docx,.xlsx,.xls,.pdf">
+        </div>
+        <div class="file-preview" id="file-preview">
+          <span class="fp-name" id="fp-name"></span>
+          <button type="button" id="fp-remove">Retirer</button>
+        </div>
+        <div class="error-msg">Merci de joindre un fichier au format accepté.</div>
+      </div>
+
+      <div class="field" id="field-email_notification">
+        <label for="email_notification" class="required">Email pour recevoir le lien</label>
+        <input type="email" id="email_notification" name="email_notification" autocomplete="email" placeholder="vous@exemple.com">
+        <div class="hint">Vous recevrez le fichier XLSForm généré à cette adresse.</div>
+        <div class="error-msg">Merci d'indiquer une adresse email valide.</div>
+      </div>
+
+      <div class="field" id="field-observations">
+        <label for="observations">Observations / Instructions complémentaires (facultatif)</label>
+        <textarea id="observations" name="observations" maxlength="1000" placeholder="Ex : Faites attention à la question 5. La section ménage est un roster. Le numéro de téléphone est obligatoire."></textarea>
+        <div class="char-count"><span id="obs-count">0</span> / 1000</div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span class="spinner" id="spinner"></span>
+        <span id="submit-label">Envoyer le questionnaire</span>
+      </button>
+    </form>
   </div>
-</section>
 
-<footer class="footer">
-  <p><strong>Irié Armand Davy TRE BI</strong> — Digital Health & Data Analyst · Jhpiego/RISE · Abidjan, Côte d'Ivoire</p>
-  <p style="margin-top:6px">armanddavy7@gmail.com · <a href="https://linkedin.com/in/tre-bi" style="color:var(--orange)">LinkedIn</a> · <a href="https://github.com/trebi7" style="color:var(--orange)">GitHub</a></p>
-</footer>
+  <footer>Armand Davy TRE BI, Data Analyst</footer>
+</div>
 
+<script>
+(function(){
+  // === CONFIGURATION ===
+  // URL du webhook n8n (nœud "Recevoir Questionnaire (Webhook)")
+  var WEBHOOK_URL = "https://davy77.app.n8n.cloud/webhook/xlsform-questionnaire";
+  var MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 Mo
+  var ACCEPTED_EXT = ["docx", "xlsx", "xls", "pdf"];
+
+  var form = document.getElementById("questionnaire-form");
+  var dropzone = document.getElementById("dropzone");
+  var fileInput = document.getElementById("questionnaire_file");
+  var filePreview = document.getElementById("file-preview");
+  var fpName = document.getElementById("fp-name");
+  var fpRemove = document.getElementById("fp-remove");
+  var submitBtn = document.getElementById("submit-btn");
+  var spinner = document.getElementById("spinner");
+  var submitLabel = document.getElementById("submit-label");
+  var obsField = document.getElementById("observations");
+  var obsCount = document.getElementById("obs-count");
+  var bannerSuccess = document.getElementById("banner-success");
+  var bannerError = document.getElementById("banner-error");
+
+  var selectedFile = null;
+
+  // --- Compteur de caractères ---
+  obsField.addEventListener("input", function(){
+    obsCount.textContent = obsField.value.length;
+  });
+
+  // --- Gestion du fichier (clic + glisser-déposer) ---
+  function getExt(name){
+    return (name.split(".").pop() || "").toLowerCase();
+  }
+
+  function setFile(file){
+    if (!file) return;
+    var ext = getExt(file.name);
+    if (ACCEPTED_EXT.indexOf(ext) === -1) {
+      showFieldError("questionnaire_file", "Format non accepté (." + ext + "). Utilisez .docx, .xlsx, .xls ou .pdf.");
+      return;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      showFieldError("questionnaire_file", "Fichier trop volumineux (" + Math.round(file.size/1024/1024) + " Mo). Maximum 20 Mo.");
+      return;
+    }
+    clearFieldError("questionnaire_file");
+    selectedFile = file;
+    fpName.textContent = file.name + " (" + Math.round(file.size/1024) + " Ko)";
+    filePreview.classList.add("show");
+  }
+
+  fileInput.addEventListener("change", function(e){
+    setFile(e.target.files[0]);
+  });
+
+  dropzone.addEventListener("dragover", function(e){
+    e.preventDefault();
+    dropzone.classList.add("dragover");
+  });
+  dropzone.addEventListener("dragleave", function(){
+    dropzone.classList.remove("dragover");
+  });
+  dropzone.addEventListener("drop", function(e){
+    e.preventDefault();
+    dropzone.classList.remove("dragover");
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setFile(e.dataTransfer.files[0]);
+    }
+  });
+  dropzone.addEventListener("keydown", function(e){
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+
+  fpRemove.addEventListener("click", function(){
+    selectedFile = null;
+    fileInput.value = "";
+    filePreview.classList.remove("show");
+  });
+
+  // --- Validation ---
+  function showFieldError(fieldId, msg){
+    var field = document.getElementById("field-" + fieldId);
+    if (!field) return;
+    field.classList.add("has-error");
+    var msgEl = field.querySelector(".error-msg");
+    if (msg && msgEl) msgEl.textContent = msg;
+    var input = field.querySelector("input, textarea");
+    if (input) input.classList.add("invalid");
+    else document.getElementById("dropzone").classList.add("invalid");
+  }
+  function clearFieldError(fieldId){
+    var field = document.getElementById("field-" + fieldId);
+    if (!field) return;
+    field.classList.remove("has-error");
+    var input = field.querySelector("input, textarea");
+    if (input) input.classList.remove("invalid");
+    document.getElementById("dropzone").classList.remove("invalid");
+  }
+
+  function isValidEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  function validateForm(){
+    var valid = true;
+    var nomProjet = document.getElementById("nom_projet");
+    var email = document.getElementById("email_notification");
+
+    if (!nomProjet.value.trim()) {
+      showFieldError("nom_projet");
+      valid = false;
+    } else {
+      clearFieldError("nom_projet");
+    }
+
+    if (!selectedFile) {
+      showFieldError("questionnaire_file", "Merci de joindre un fichier au format accepté.");
+      valid = false;
+    }
+
+    if (!email.value.trim() || !isValidEmail(email.value.trim())) {
+      showFieldError("email_notification");
+      valid = false;
+    } else {
+      clearFieldError("email_notification");
+    }
+
+    return valid;
+  }
+
+  // Effacer l'erreur dès que l'utilisateur corrige le champ
+  ["nom_projet", "email_notification"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", function(){
+      clearFieldError(id);
+    });
+  });
+
+  function showBanner(type, text){
+    bannerSuccess.classList.remove("show");
+    bannerError.classList.remove("show");
+    if (type === "success") {
+      document.getElementById("banner-success-text").textContent = text;
+      bannerSuccess.classList.add("show");
+      bannerSuccess.scrollIntoView({behavior:"smooth", block:"start"});
+    } else {
+      document.getElementById("banner-error-text").textContent = text;
+      bannerError.classList.add("show");
+      bannerError.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+  }
+
+  function setLoading(isLoading){
+    submitBtn.disabled = isLoading;
+    spinner.classList.toggle("show", isLoading);
+    submitLabel.textContent = isLoading ? "Envoi en cours..." : "Envoyer le questionnaire";
+  }
+
+  // --- Soumission ---
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    bannerSuccess.classList.remove("show");
+    bannerError.classList.remove("show");
+
+    if (!validateForm()) {
+      var firstError = document.querySelector(".field.has-error");
+      if (firstError) firstError.scrollIntoView({behavior:"smooth", block:"center"});
+      return;
+    }
+
+    var fd = new FormData();
+    fd.append("nom_projet", document.getElementById("nom_projet").value.trim());
+    fd.append("email_notification", document.getElementById("email_notification").value.trim());
+    fd.append("observations", obsField.value.trim());
+    fd.append("questionnaire_file", selectedFile, selectedFile.name);
+
+    setLoading(true);
+
+    fetch(WEBHOOK_URL, {
+      method: "POST",
+      body: fd
+    }).then(function(res){
+      if (!res.ok) throw new Error("Réponse HTTP " + res.status);
+      return res.text();
+    }).then(function(text){
+      setLoading(false);
+      showBanner("success", text || "Votre questionnaire a été reçu. Vous recevrez le fichier XLSForm par email dans quelques minutes.");
+      form.reset();
+      selectedFile = null;
+      filePreview.classList.remove("show");
+      obsCount.textContent = "0";
+    }).catch(function(err){
+      setLoading(false);
+      showBanner("error", "L'envoi a échoué (" + err.message + "). Vérifiez votre connexion et réessayez, ou contactez l'administrateur si le problème persiste.");
+    });
+  });
+})();
+</script>
 </body>
 </html>
