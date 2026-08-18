@@ -1,432 +1,1102 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Générateur XLSForm Automatique</title>
-<style>
-  :root{
-    --primary:#1565c0;
-    --primary-dark:#0d47a1;
-    --success:#2e7d32;
-    --success-bg:#e8f5e9;
-    --error:#c62828;
-    --error-bg:#ffebee;
-    --border:#dfe3e8;
-    --text:#263238;
-    --muted:#6b7785;
-    --bg:#f4f6f8;
-    --card:#ffffff;
-    --radius:12px;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:linear-gradient(180deg,#eef3fb 0%,var(--bg) 320px);
-    color:var(--text);
-    min-height:100vh;
-    padding:32px 16px 64px;
-  }
-  .wrap{max-width:640px;margin:0 auto;}
-  header{text-align:center;margin-bottom:28px;}
-  header h1{font-size:1.6rem;margin:0 0 8px;color:var(--primary-dark);}
-  header p{color:var(--muted);font-size:0.95rem;line-height:1.5;margin:0;}
-  .card{
-    background:var(--card);
-    border-radius:var(--radius);
-    box-shadow:0 4px 24px rgba(20,40,80,0.08);
-    padding:28px 24px;
-  }
-  .field{margin-bottom:22px;}
-  label{
-    display:block;
-    font-weight:600;
-    font-size:0.92rem;
-    margin-bottom:6px;
-  }
-  .required::after{content:" *";color:var(--error);}
-  .hint{font-size:0.8rem;color:var(--muted);margin-top:4px;}
-  input[type="text"],input[type="email"],textarea{
-    width:100%;
-    padding:11px 13px;
-    border:1.5px solid var(--border);
-    border-radius:8px;
-    font-size:0.95rem;
-    font-family:inherit;
-    transition:border-color .15s, box-shadow .15s;
-    background:#fbfcfe;
-  }
-  textarea{resize:vertical;min-height:80px;}
-  input:focus,textarea:focus{
-    outline:none;
-    border-color:var(--primary);
-    box-shadow:0 0 0 3px rgba(21,101,192,0.14);
-    background:#fff;
-  }
-  input.invalid,textarea.invalid,.dropzone.invalid{
-    border-color:var(--error) !important;
-    box-shadow:0 0 0 3px rgba(198,40,40,0.12) !important;
-  }
-  .error-msg{
-    display:none;
-    color:var(--error);
-    font-size:0.82rem;
-    margin-top:5px;
-    font-weight:500;
-  }
-  .field.has-error .error-msg{display:block;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de fichiers XLSForm</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .dropzone{
-    border:2px dashed var(--border);
-    border-radius:10px;
-    padding:22px 16px;
-    text-align:center;
-    cursor:pointer;
-    background:#fbfcfe;
-    transition:border-color .15s, background .15s;
-    position:relative;
-  }
-  .dropzone.dragover{
-    border-color:var(--primary);
-    background:#eef5ff;
-  }
-  .dropzone .dz-icon{font-size:1.8rem;margin-bottom:6px;}
-  .dropzone .dz-main{font-weight:600;font-size:0.92rem;}
-  .dropzone .dz-sub{font-size:0.8rem;color:var(--muted);margin-top:4px;}
-  .dropzone input[type="file"]{
-    position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
-  }
-  .file-preview{
-    display:none;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    background:#eef5ff;
-    border:1.5px solid var(--primary);
-    border-radius:8px;
-    padding:10px 14px;
-    margin-top:10px;
-    font-size:0.88rem;
-  }
-  .file-preview.show{display:flex;}
-  .file-preview .fp-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
-  .file-preview button{
-    border:none;background:none;color:var(--error);cursor:pointer;font-size:0.85rem;font-weight:600;
-    padding:4px 8px;
-  }
+    :root {
+      --green-dark:  #1b5e20;
+      --green:       #2e7d32;
+      --green-mid:   #388e3c;
+      --green-light: #4caf50;
+      --green-pale:  #e8f5e9;
+      --green-ghost: #f1f8f2;
+      --blue:        #1565c0;
+      --grey-bg:     #f5f7f5;
+      --grey-border: #c8d8c9;
+      --grey-text:   #555;
+      --text:        #1a2e1a;
+      --white:       #ffffff;
+      --shadow:      0 4px 24px rgba(30,80,30,.10);
+      --radius:      12px;
+      --transition:  .2s ease;
+    }
 
-  .char-count{font-size:0.78rem;color:var(--muted);text-align:right;margin-top:4px;}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--grey-bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-  button.submit-btn{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:9px;
-    background:var(--primary);
-    color:#fff;
-    font-size:1rem;
-    font-weight:600;
-    cursor:pointer;
-    transition:background .15s, transform .1s;
-    display:flex;align-items:center;justify-content:center;gap:10px;
-  }
-  button.submit-btn:hover{background:var(--primary-dark);}
-  button.submit-btn:active{transform:scale(0.99);}
-  button.submit-btn:disabled{background:#9fb3c8;cursor:not-allowed;}
+    /* ── Header ── */
+    header {
+      background: var(--green-dark);
+      color: var(--white);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.25);
+    }
 
-  .spinner{
-    width:18px;height:18px;border-radius:50%;
-    border:2.5px solid rgba(255,255,255,0.4);
-    border-top-color:#fff;
-    animation:spin .7s linear infinite;
-    display:none;
-  }
-  .spinner.show{display:inline-block;}
-  @keyframes spin{to{transform:rotate(360deg);}}
+    .logo-block {
+      width: 52px;
+      height: 52px;
+      background: var(--white);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-  .banner{
-    display:none;
-    border-radius:10px;
-    padding:16px 18px;
-    margin-bottom:20px;
-    font-size:0.92rem;
-    line-height:1.5;
-  }
-  .banner.show{display:block;}
-  .banner.success{background:var(--success-bg);color:var(--success);border:1px solid #a5d6a7;}
-  .banner.error{background:var(--error-bg);color:var(--error);border:1px solid #ef9a9a;}
-  .banner strong{display:block;margin-bottom:4px;font-size:0.98rem;}
+    .logo-block svg { width: 36px; height: 36px; }
 
-  footer{text-align:center;margin-top:24px;color:var(--muted);font-size:0.78rem;}
+    .header-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: .3px;
+    }
 
-  @media (max-width:480px){
-    .card{padding:22px 16px;}
-    header h1{font-size:1.35rem;}
-  }
-</style>
+    .header-text p {
+      font-size: .82rem;
+      opacity: .80;
+      margin-top: 2px;
+    }
+
+    /* ── Main layout ── */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px 60px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 680px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--green), var(--green-mid));
+      color: var(--white);
+      padding: 28px 36px 24px;
+    }
+
+    .card-header h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .card-header p {
+      font-size: .9rem;
+      opacity: .88;
+      line-height: 1.5;
+    }
+
+    .card-body {
+      padding: 36px;
+    }
+
+    /* ── Steps indicator ── */
+    .steps {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      font-size: .72rem;
+      color: var(--grey-text);
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .step::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      height: 3px;
+      background: var(--grey-border);
+      border-radius: 99px;
+    }
+
+    .step.active { color: var(--green); font-weight: 600; }
+    .step.active::after { background: var(--green-light); }
+    .step.done { color: var(--green-mid); }
+    .step.done::after { background: var(--green-mid); }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--grey-border);
+      color: var(--grey-text);
+      font-size: .7rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .step.active .step-num { background: var(--green-light); color: #fff; }
+    .step.done .step-num { background: var(--green-mid); color: #fff; }
+
+    /* ── Form fields ── */
+    .field-group { margin-bottom: 24px; }
+
+    label {
+      display: block;
+      font-size: .875rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+    }
+
+    label .required { color: #c62828; margin-left: 3px; }
+    label .optional { font-weight: 400; color: var(--grey-text); font-size: .78rem; margin-left: 4px; }
+
+    .field-hint {
+      font-size: .78rem;
+      color: var(--grey-text);
+      margin-top: -3px;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--grey-border);
+      border-radius: 8px;
+      font-size: .9rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: var(--green-light);
+      box-shadow: 0 0 0 3px rgba(76,175,80,.15);
+    }
+
+    input.error,
+    textarea.error { border-color: #e53935; }
+
+    .error-msg {
+      font-size: .78rem;
+      color: #c62828;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .error-msg.visible { display: block; }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    /* ── File drop zone ── */
+    .drop-zone {
+      border: 2px dashed var(--grey-border);
+      border-radius: 10px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+      position: relative;
+      background: var(--green-ghost);
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: var(--green-light);
+      background: var(--green-pale);
+    }
+
+    .drop-zone.has-file {
+      border-color: var(--green-mid);
+      background: var(--green-pale);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .drop-icon {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .drop-text { font-size: .9rem; color: var(--grey-text); line-height: 1.5; }
+    .drop-text strong { color: var(--green); }
+    .drop-formats { font-size: .75rem; color: #888; margin-top: 6px; }
+
+    .file-selected {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-pale);
+      border: 1.5px solid var(--green-mid);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: .875rem;
+    }
+
+    .file-selected.visible { display: flex; }
+    .file-icon { font-size: 1.4rem; }
+    .file-name { font-weight: 600; color: var(--green); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-size { color: var(--grey-text); font-size: .78rem; flex-shrink: 0; }
+    .file-remove {
+      cursor: pointer;
+      color: #999;
+      font-size: 1.1rem;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: none;
+      background: none;
+      flex-shrink: 0;
+    }
+    .file-remove:hover { color: #c62828; background: #ffebee; }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--green), var(--green-mid));
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity var(--transition), transform var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: .3px;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
+    .btn-submit:active:not(:disabled) { transform: translateY(0); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    /* ── Progress panel (shown after submit) ── */
+    #progress-panel {
+      display: none;
+      padding: 8px 0 16px;
+    }
+
+    #progress-panel.visible { display: block; }
+
+    .progress-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .progress-header h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .progress-header p {
+      font-size: .85rem;
+      color: var(--grey-text);
+      line-height: 1.5;
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar-track {
+      width: 100%;
+      height: 10px;
+      background: var(--grey-border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--green-light), var(--green-mid));
+      border-radius: 99px;
+      transition: width .6s ease;
+    }
+
+    .progress-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: .75rem;
+      color: var(--grey-text);
+      margin-bottom: 24px;
+    }
+
+    .progress-bar-label #progress-percent { font-weight: 700; color: var(--green); }
+
+    /* ── Progress timeline ── */
+    .timeline {
+      position: relative;
+      margin: 0 0 28px 0;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    /* Vertical connector line */
+    .timeline-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 17px;
+      top: 34px;
+      bottom: 0;
+      width: 2px;
+      background: var(--grey-border);
+      transition: background .4s ease;
+    }
+
+    .timeline-item.done:not(:last-child)::after { background: var(--green-light); }
+
+    /* Icon circle */
+    .tl-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      background: var(--grey-border);
+      color: var(--grey-text);
+      transition: background .3s, color .3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-item.active .tl-icon {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .timeline-item.done .tl-icon {
+      background: var(--green-pale);
+      color: var(--green);
+    }
+
+    /* Spinning ring for active state */
+    .timeline-item.active .tl-icon::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2.5px solid transparent;
+      border-top-color: var(--green-light);
+      animation: spin .9s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .tl-body {
+      flex: 1;
+      padding-top: 6px;
+    }
+
+    .tl-label {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--grey-text);
+      line-height: 1.3;
+      transition: color .3s;
+    }
+
+    .timeline-item.active .tl-label { color: var(--text); }
+    .timeline-item.done .tl-label  { color: var(--green); }
+
+    .tl-status {
+      font-size: .75rem;
+      color: #aaa;
+      margin-top: 2px;
+      height: 16px;
+      transition: color .3s;
+    }
+
+    .timeline-item.active .tl-status { color: #e65100; }
+    .timeline-item.done .tl-status  { color: var(--green-mid); }
+
+    /* ── Final success block ── */
+    #final-success {
+      display: none;
+      text-align: center;
+      padding: 10px 0 4px;
+      animation: popIn .5s cubic-bezier(.36,.07,.19,.97);
+    }
+
+    #final-success.visible { display: block; }
+
+    @keyframes popIn {
+      0%   { transform: scale(.85); opacity: 0; }
+      80%  { transform: scale(1.04); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .final-icon {
+      width: 76px; height: 76px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 2.2rem;
+    }
+
+    .final-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .final-email-confirm {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-pale);
+      border: 1.5px solid #a5d6a7;
+      border-radius: 30px;
+      padding: 8px 18px;
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--green);
+      margin-bottom: 18px;
+    }
+
+    .info-box {
+      background: var(--green-ghost);
+      border: 1.5px solid var(--green-pale);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: .85rem;
+      color: var(--green);
+      line-height: 1.6;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .btn-again {
+      background: none;
+      border: 2px solid var(--green);
+      color: var(--green);
+      font-size: .9rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      font-family: inherit;
+    }
+    .btn-again:hover { background: var(--green); color: #fff; }
+
+    /* ── Info section ── */
+    .info-strip {
+      background: var(--green-ghost);
+      border-top: 1px solid var(--green-pale);
+      padding: 20px 36px;
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: .8rem;
+      color: var(--grey-text);
+      line-height: 1.4;
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .info-item-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--green-dark);
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      font-size: .75rem;
+      padding: 14px 20px;
+    }
+
+    footer a { color: rgba(255,255,255,.8); text-decoration: none; }
+
+    /* ── Divider ── */
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 28px 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .header-text h1 { font-size: 1rem; }
+      .card-body { padding: 24px 20px; }
+      .card-header { padding: 22px 20px 18px; }
+      .info-strip { flex-direction: column; gap: 14px; padding: 16px 20px; }
+      .steps { display: none; }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Générateur XLSForm Automatique</h1>
-    <p>Collez ou déposez votre questionnaire. Nous analyserons sa structure et produirons un fichier XLSForm prêt à déployer sur KoboToolbox ou toute autre plateforme de base ODK.</p>
-  </header>
 
-  <div class="card">
-    <div id="banner-success" class="banner success">
-      <strong>Questionnaire envoyé !</strong>
-      <span id="banner-success-text"></span>
-    </div>
-    <div id="banner-error" class="banner error">
-      <strong>Une erreur est survenue</strong>
-      <span id="banner-error-text"></span>
-    </div>
-
-    <form id="questionnaire-form" novalidate>
-
-      <div class="field" id="field-nom_projet">
-        <label for="nom_projet" class="required">Nom du projet / de l'enquête</label>
-        <input type="text" id="nom_projet" name="nom_projet" maxlength="150" autocomplete="off" placeholder="Ex : Enquête ménages 2026">
-        <div class="error-msg">Merci d'indiquer le nom du projet.</div>
-      </div>
-
-      <div class="field" id="field-questionnaire_file">
-        <label class="required">Questionnaire (Word .docx, Excel .xlsx/.xls, ou PDF .pdf)</label>
-        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Sélectionner un fichier questionnaire">
-          <div class="dz-icon">📄</div>
-          <div class="dz-main">Cliquez pour choisir un fichier ou glissez-le ici</div>
-          <div class="dz-sub">.docx, .xlsx, .xls ou .pdf — 20 Mo max</div>
-          <input type="file" id="questionnaire_file" name="questionnaire_file" accept=".docx,.xlsx,.xls,.pdf">
-        </div>
-        <div class="file-preview" id="file-preview">
-          <span class="fp-name" id="fp-name"></span>
-          <button type="button" id="fp-remove">Retirer</button>
-        </div>
-        <div class="error-msg">Merci de joindre un fichier au format accepté.</div>
-      </div>
-
-      <div class="field" id="field-email_notification">
-        <label for="email_notification" class="required">Email pour recevoir le lien</label>
-        <input type="email" id="email_notification" name="email_notification" autocomplete="email" placeholder="vous@exemple.com">
-        <div class="hint">Vous recevrez le fichier XLSForm généré à cette adresse.</div>
-        <div class="error-msg">Merci d'indiquer une adresse email valide.</div>
-      </div>
-
-      <div class="field" id="field-observations">
-        <label for="observations">Observations / Instructions complémentaires (facultatif)</label>
-        <textarea id="observations" name="observations" maxlength="1000" placeholder="Ex : Faites attention à la question 5. La section ménage est un roster. Le numéro de téléphone est obligatoire."></textarea>
-        <div class="char-count"><span id="obs-count">0</span> / 1000</div>
-      </div>
-
-      <button type="submit" class="submit-btn" id="submit-btn">
-        <span class="spinner" id="spinner"></span>
-        <span id="submit-label">Envoyer le questionnaire</span>
-      </button>
-    </form>
+<!-- ══ Header ══ -->
+<header>
+  <div class="logo-block">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="17" fill="#e8f5e9"/>
+      <path d="M10 26 L18 10 L26 26" stroke="#2e7d32" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M13 21 H23" stroke="#4caf50" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="18" cy="10" r="2" fill="#4caf50"/>
+    </svg>
   </div>
+  <div class="header-text">
+    <h1>Générateur de fichiers XLSForm</h1>
+    <p>Armand Davy TRE BI, Data Analyst</p>
+  </div>
+</header>
 
-  <footer>Armand Davy TRE BI, Data Analyst</footer>
-</div>
+<!-- ══ Main ══ -->
+<main>
+  <div class="card">
+    <div class="card-header">
+      <h2>Convertissez votre questionnaire en XLSForm</h2>
+      <p>Déposez votre fichier Word, Excel ou PDF — notre système génère automatiquement un formulaire KoboToolbox prêt à déployer.</p>
+    </div>
+
+    <div class="card-body">
+
+      <!-- Steps -->
+      <div class="steps">
+        <div class="step active" id="tab-1">
+          <div class="step-num">1</div><br>Déposez votre fichier
+        </div>
+        <div class="step" id="tab-2">
+          <div class="step-num">2</div><br>Traitement
+        </div>
+        <div class="step" id="tab-3">
+          <div class="step-num">3</div><br>Recevez le XLSForm
+        </div>
+      </div>
+
+      <!-- ── Form ── -->
+      <form id="xlsform-form"
+            action="https://davy77.app.n8n.cloud/webhook/xlsform-questionnaire"
+            method="POST"
+            enctype="multipart/form-data"
+            target="hidden_iframe"
+            novalidate>
+
+        <!-- Nom du projet -->
+        <div class="field-group">
+          <label for="nom_projet">
+            Nom du projet / de l'enquête <span class="required">*</span>
+          </label>
+          <div class="field-hint">Ex : Enquête ménages 2026 · Évaluation des bénéficiaires</div>
+          <input
+            type="text"
+            id="nom_projet"
+            name="nom_projet"
+            placeholder="Nom de votre projet ou enquête"
+            autocomplete="off"
+            required>
+          <div class="error-msg" id="err-nom">Ce champ est obligatoire.</div>
+        </div>
+
+        <!-- Fichier questionnaire -->
+        <div class="field-group">
+          <label>
+            Fichier questionnaire <span class="required">*</span>
+          </label>
+          <div class="field-hint">Votre questionnaire Word, Excel ou PDF (texte sélectionnable)</div>
+
+          <div class="drop-zone" id="drop-zone">
+            <input
+              type="file"
+              id="questionnaire_file"
+              name="questionnaire_file"
+              accept=".docx,.xlsx,.xls,.pdf"
+              required>
+            <span class="drop-icon">📄</span>
+            <div class="drop-text">
+              <strong>Glissez-déposez votre fichier ici</strong><br>
+              ou cliquez pour parcourir
+            </div>
+            <div class="drop-formats">Formats acceptés : .docx · .xlsx · .xls · .pdf</div>
+          </div>
+
+          <div class="file-selected" id="file-info">
+            <span class="file-icon" id="file-icon">📄</span>
+            <span class="file-name" id="file-name">—</span>
+            <span class="file-size" id="file-size">—</span>
+            <button type="button" class="file-remove" id="file-remove" title="Retirer le fichier">✕</button>
+          </div>
+          <div class="error-msg" id="err-file">Veuillez sélectionner un fichier valide (.docx, .xlsx, .xls ou .pdf).</div>
+        </div>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label for="email_notification">
+            Adresse e-mail <span class="required">*</span>
+          </label>
+          <div class="field-hint">Le lien Google Drive vers votre XLSForm vous sera envoyé à cette adresse</div>
+          <input
+            type="email"
+            id="email_notification"
+            name="email_notification"
+            placeholder="votre@email.com"
+            autocomplete="email"
+            required>
+          <div class="error-msg" id="err-email">Veuillez saisir une adresse e-mail valide.</div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Observations -->
+        <div class="field-group">
+          <label for="observations">
+            Observations / Instructions complémentaires
+            <span class="optional">(facultatif)</span>
+          </label>
+          <div class="field-hint">
+            Précisez des instructions spécifiques : sections roster, contraintes particulières, logiques de saut, numéros de téléphone obligatoires, etc.
+          </div>
+          <textarea
+            id="observations"
+            name="observations"
+            placeholder="Ex : La section ménage est un roster. Vérifiez que les numéros de téléphone ont bien 10 chiffres. Accordez une attention particulière à la question 7 sur les sources de financement."></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-submit" id="btn-submit">
+          <span>⚡</span>
+          <span>Générer mon XLSForm</span>
+        </button>
+
+      </form>
+
+      <!-- ── Progress panel (shown after submit, replaces form) ── -->
+      <div id="progress-panel">
+
+        <div class="progress-header">
+          <h3>⚙️ Traitement en cours…</h3>
+          <p>Votre questionnaire est en cours de traitement. Ne fermez pas cet onglet.<br>Cette opération prend <strong>1 à 3 minutes</strong>.</p>
+        </div>
+
+        <!-- Barre de progression globale -->
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+        <div class="progress-bar-label">
+          <span id="progress-step-text">Fichier reçu</span>
+          <span><span id="progress-percent">0</span>%</span>
+        </div>
+
+        <div class="timeline">
+
+          <div class="timeline-item done" id="tl-0">
+            <div class="tl-icon">✅</div>
+            <div class="tl-body">
+              <div class="tl-label">Fichier reçu</div>
+              <div class="tl-status" id="tl-0-status">Terminé</div>
+            </div>
+          </div>
+
+          <div class="timeline-item" id="tl-1">
+            <div class="tl-icon" id="tl-1-icon">📄</div>
+            <div class="tl-body">
+              <div class="tl-label">Analyse du questionnaire</div>
+              <div class="tl-status" id="tl-1-status">En attente…</div>
+            </div>
+          </div>
+
+          <div class="timeline-item" id="tl-2">
+            <div class="tl-icon" id="tl-2-icon">🧠</div>
+            <div class="tl-body">
+              <div class="tl-label">Génération du XLSForm</div>
+              <div class="tl-status" id="tl-2-status">En attente…</div>
+            </div>
+          </div>
+
+          <div class="timeline-item" id="tl-3">
+            <div class="tl-icon" id="tl-3-icon">🔍</div>
+            <div class="tl-body">
+              <div class="tl-label">Validation &amp; correction automatique</div>
+              <div class="tl-status" id="tl-3-status">En attente…</div>
+            </div>
+          </div>
+
+          <div class="timeline-item" id="tl-4">
+            <div class="tl-icon" id="tl-4-icon">☁️</div>
+            <div class="tl-body">
+              <div class="tl-label">Enregistrement sur Google Drive</div>
+              <div class="tl-status" id="tl-4-status">En attente…</div>
+            </div>
+          </div>
+
+          <div class="timeline-item" id="tl-5">
+            <div class="tl-icon" id="tl-5-icon">📧</div>
+            <div class="tl-body">
+              <div class="tl-label">Envoi de l'e-mail</div>
+              <div class="tl-status" id="tl-5-status">En attente…</div>
+            </div>
+          </div>
+
+        </div><!-- /timeline -->
+
+        <!-- Final success (shown when all steps done) -->
+        <div id="final-success">
+          <div class="final-icon">🎉</div>
+          <div class="final-title">XLSForm généré avec succès !</div>
+          <div class="final-email-confirm">
+            <span>📧</span>
+            <span>E-mail envoyé à <strong id="sent-email-addr">—</strong></span>
+          </div>
+          <div class="info-box">
+            📂 Ouvrez votre boîte mail pour retrouver le lien Google Drive vers votre fichier <strong>.xlsx</strong> prêt à déployer sur KoboToolbox.<br><br>
+            📝 Le fichier est nommé : <strong>Formulaire_<em>NomProjet</em>_<em>Date</em>_<em>Heure</em>.xlsx</strong>
+          </div>
+          <button class="btn-again" id="btn-again">Soumettre un autre questionnaire</button>
+        </div>
+
+      </div><!-- /progress-panel -->
+
+    </div><!-- /card-body -->
+
+    <!-- Info strip -->
+    <div class="info-strip">
+      <div class="info-item">
+        <span class="info-item-icon">🤖</span>
+        <div><strong>Traitement automatisé</strong><br>Analyse intelligente et conversion automatique de votre questionnaire</div>
+      </div>
+      <div class="info-item">
+        <span class="info-item-icon">✅</span>
+        <div><strong>Validation automatique</strong><br>Noms de variables, listes de choix, logiques de saut vérifiés</div>
+      </div>
+      <div class="info-item">
+        <span class="info-item-icon">☁️</span>
+        <div><strong>Livraison sur Drive</strong><br>Fichier .xlsx déposé dans votre dossier Google Drive partagé</div>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+</main>
+
+<!-- iframe caché pour capter la réponse n8n sans redirection -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none" title="Réponse serveur"></iframe>
+
+<!-- ══ Footer ══ -->
+<footer>
+  © 2026 · Workflow propulsé par <a href="https://n8n.io" target="_blank">n8n</a> &amp; KoboToolbox
+</footer>
 
 <script>
-(function(){
-  // === CONFIGURATION ===
-  // URL du webhook n8n (nœud "Recevoir Questionnaire (Webhook)")
-  var WEBHOOK_URL = "https://davy77.app.n8n.cloud/webhook/xlsform-questionnaire";
-  var MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 Mo
-  var ACCEPTED_EXT = ["docx", "xlsx", "xls", "pdf"];
+(function() {
+  'use strict';
 
-  var form = document.getElementById("questionnaire-form");
-  var dropzone = document.getElementById("dropzone");
-  var fileInput = document.getElementById("questionnaire_file");
-  var filePreview = document.getElementById("file-preview");
-  var fpName = document.getElementById("fp-name");
-  var fpRemove = document.getElementById("fp-remove");
-  var submitBtn = document.getElementById("submit-btn");
-  var spinner = document.getElementById("spinner");
-  var submitLabel = document.getElementById("submit-label");
-  var obsField = document.getElementById("observations");
-  var obsCount = document.getElementById("obs-count");
-  var bannerSuccess = document.getElementById("banner-success");
-  var bannerError = document.getElementById("banner-error");
+  /* ── Éléments ── */
+  const form          = document.getElementById('xlsform-form');
+  const progressPanel = document.getElementById('progress-panel');
+  const finalSuccess  = document.getElementById('final-success');
+  const btnSubmit     = document.getElementById('btn-submit');
+  const btnAgain      = document.getElementById('btn-again');
+  const dropZone      = document.getElementById('drop-zone');
+  const fileInput     = document.getElementById('questionnaire_file');
+  const fileInfo      = document.getElementById('file-info');
+  const fileName      = document.getElementById('file-name');
+  const fileSize      = document.getElementById('file-size');
+  const fileIcon      = document.getElementById('file-icon');
+  const fileRemove    = document.getElementById('file-remove');
+  const sentEmailAddr = document.getElementById('sent-email-addr');
+  const progressFill  = document.getElementById('progress-bar-fill');
+  const progressPct   = document.getElementById('progress-percent');
+  const progressText  = document.getElementById('progress-step-text');
 
-  var selectedFile = null;
+  /* ── Icônes par extension ── */
+  const EXT_ICONS = { docx:'📝', doc:'📝', xlsx:'📊', xls:'📊', pdf:'📕' };
 
-  // --- Compteur de caractères ---
-  obsField.addEventListener("input", function(){
-    obsCount.textContent = obsField.value.length;
-  });
-
-  // --- Gestion du fichier (clic + glisser-déposer) ---
-  function getExt(name){
-    return (name.split(".").pop() || "").toLowerCase();
+  function formatBytes(b) {
+    if (b < 1024) return b + ' o';
+    if (b < 1024*1024) return (b/1024).toFixed(0) + ' Ko';
+    return (b/(1024*1024)).toFixed(1) + ' Mo';
   }
 
-  function setFile(file){
+  function showFile(file) {
     if (!file) return;
-    var ext = getExt(file.name);
-    if (ACCEPTED_EXT.indexOf(ext) === -1) {
-      showFieldError("questionnaire_file", "Format non accepté (." + ext + "). Utilisez .docx, .xlsx, .xls ou .pdf.");
+    const ext = file.name.split('.').pop().toLowerCase();
+    fileIcon.textContent = EXT_ICONS[ext] || '📄';
+    fileName.textContent = file.name;
+    fileSize.textContent = formatBytes(file.size);
+    fileInfo.classList.add('visible');
+    dropZone.classList.add('has-file');
+    clearError('err-file');
+  }
+
+  function clearFile() {
+    fileInput.value = '';
+    fileInfo.classList.remove('visible');
+    dropZone.classList.remove('has-file');
+  }
+
+  /* ── Drag & drop ── */
+  ['dragenter','dragover'].forEach(evt =>
+    dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('dragover'); }));
+
+  ['dragleave','drop'].forEach(evt =>
+    dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.remove('dragover'); }));
+
+  dropZone.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0];
+    if (!f) return;
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (!['docx','xlsx','xls','pdf'].includes(ext)) {
+      showError('err-file', 'Format non accepté. Utilisez .docx, .xlsx, .xls ou .pdf');
       return;
     }
-    if (file.size > MAX_FILE_SIZE) {
-      showFieldError("questionnaire_file", "Fichier trop volumineux (" + Math.round(file.size/1024/1024) + " Mo). Maximum 20 Mo.");
-      return;
-    }
-    clearFieldError("questionnaire_file");
-    selectedFile = file;
-    fpName.textContent = file.name + " (" + Math.round(file.size/1024) + " Ko)";
-    filePreview.classList.add("show");
+    try {
+      const dt = new DataTransfer();
+      dt.items.add(f);
+      fileInput.files = dt.files;
+    } catch(err) { /* Safari fallback */ }
+    showFile(f);
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) showFile(fileInput.files[0]);
+    else clearFile();
+  });
+
+  fileRemove.addEventListener('click', clearFile);
+
+  /* ── Validation ── */
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    if (msg) el.textContent = msg;
+    el.classList.add('visible');
+    const field = document.getElementById(id.replace('err-',''));
+    if (field) field.classList.add('error');
   }
 
-  fileInput.addEventListener("change", function(e){
-    setFile(e.target.files[0]);
-  });
-
-  dropzone.addEventListener("dragover", function(e){
-    e.preventDefault();
-    dropzone.classList.add("dragover");
-  });
-  dropzone.addEventListener("dragleave", function(){
-    dropzone.classList.remove("dragover");
-  });
-  dropzone.addEventListener("drop", function(e){
-    e.preventDefault();
-    dropzone.classList.remove("dragover");
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setFile(e.dataTransfer.files[0]);
-    }
-  });
-  dropzone.addEventListener("keydown", function(e){
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      fileInput.click();
-    }
-  });
-
-  fpRemove.addEventListener("click", function(){
-    selectedFile = null;
-    fileInput.value = "";
-    filePreview.classList.remove("show");
-  });
-
-  // --- Validation ---
-  function showFieldError(fieldId, msg){
-    var field = document.getElementById("field-" + fieldId);
-    if (!field) return;
-    field.classList.add("has-error");
-    var msgEl = field.querySelector(".error-msg");
-    if (msg && msgEl) msgEl.textContent = msg;
-    var input = field.querySelector("input, textarea");
-    if (input) input.classList.add("invalid");
-    else document.getElementById("dropzone").classList.add("invalid");
-  }
-  function clearFieldError(fieldId){
-    var field = document.getElementById("field-" + fieldId);
-    if (!field) return;
-    field.classList.remove("has-error");
-    var input = field.querySelector("input, textarea");
-    if (input) input.classList.remove("invalid");
-    document.getElementById("dropzone").classList.remove("invalid");
+  function clearError(id) {
+    const el = document.getElementById(id);
+    el.classList.remove('visible');
+    const field = document.getElementById(id.replace('err-',''));
+    if (field) field.classList.remove('error');
   }
 
-  function isValidEmail(v){
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  }
+  function validateForm() {
+    let valid = true;
 
-  function validateForm(){
-    var valid = true;
-    var nomProjet = document.getElementById("nom_projet");
-    var email = document.getElementById("email_notification");
+    const nom = document.getElementById('nom_projet');
+    if (!nom.value.trim()) { showError('err-nom'); valid = false; }
+    else clearError('err-nom');
 
-    if (!nomProjet.value.trim()) {
-      showFieldError("nom_projet");
+    if (!fileInput.files || !fileInput.files.length) {
+      showError('err-file', 'Veuillez sélectionner un fichier (.docx, .xlsx, .xls ou .pdf).');
       valid = false;
     } else {
-      clearFieldError("nom_projet");
+      const ext = fileInput.files[0].name.split('.').pop().toLowerCase();
+      if (!['docx','xlsx','xls','pdf'].includes(ext)) {
+        showError('err-file', 'Format non accepté. Utilisez .docx, .xlsx, .xls ou .pdf');
+        valid = false;
+      } else clearError('err-file');
     }
 
-    if (!selectedFile) {
-      showFieldError("questionnaire_file", "Merci de joindre un fichier au format accepté.");
-      valid = false;
-    }
-
-    if (!email.value.trim() || !isValidEmail(email.value.trim())) {
-      showFieldError("email_notification");
-      valid = false;
-    } else {
-      clearFieldError("email_notification");
-    }
+    const email = document.getElementById('email_notification');
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email.value.trim())) { showError('err-email'); valid = false; }
+    else clearError('err-email');
 
     return valid;
   }
 
-  // Effacer l'erreur dès que l'utilisateur corrige le champ
-  ["nom_projet", "email_notification"].forEach(function(id){
-    document.getElementById(id).addEventListener("input", function(){
-      clearFieldError(id);
-    });
+  /* ── Inline validation ── */
+  document.getElementById('nom_projet').addEventListener('blur', function() {
+    if (this.value.trim()) clearError('err-nom'); else showError('err-nom');
   });
 
-  function showBanner(type, text){
-    bannerSuccess.classList.remove("show");
-    bannerError.classList.remove("show");
-    if (type === "success") {
-      document.getElementById("banner-success-text").textContent = text;
-      bannerSuccess.classList.add("show");
-      bannerSuccess.scrollIntoView({behavior:"smooth", block:"start"});
-    } else {
-      document.getElementById("banner-error-text").textContent = text;
-      bannerError.classList.add("show");
-      bannerError.scrollIntoView({behavior:"smooth", block:"start"});
-    }
-  }
-
-  function setLoading(isLoading){
-    submitBtn.disabled = isLoading;
-    spinner.classList.toggle("show", isLoading);
-    submitLabel.textContent = isLoading ? "Envoi en cours..." : "Envoyer le questionnaire";
-  }
-
-  // --- Soumission ---
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
-    bannerSuccess.classList.remove("show");
-    bannerError.classList.remove("show");
-
-    if (!validateForm()) {
-      var firstError = document.querySelector(".field.has-error");
-      if (firstError) firstError.scrollIntoView({behavior:"smooth", block:"center"});
-      return;
-    }
-
-    var fd = new FormData();
-    fd.append("nom_projet", document.getElementById("nom_projet").value.trim());
-    fd.append("email_notification", document.getElementById("email_notification").value.trim());
-    fd.append("observations", obsField.value.trim());
-    fd.append("questionnaire_file", selectedFile, selectedFile.name);
-
-    setLoading(true);
-
-    fetch(WEBHOOK_URL, {
-      method: "POST",
-      body: fd
-    }).then(function(res){
-      if (!res.ok) throw new Error("Réponse HTTP " + res.status);
-      return res.text();
-    }).then(function(text){
-      setLoading(false);
-      showBanner("success", text || "Votre questionnaire a été reçu. Vous recevrez le fichier XLSForm par email dans quelques minutes.");
-      form.reset();
-      selectedFile = null;
-      filePreview.classList.remove("show");
-      obsCount.textContent = "0";
-    }).catch(function(err){
-      setLoading(false);
-      showBanner("error", "L'envoi a échoué (" + err.message + "). Vérifiez votre connexion et réessayez, ou contactez l'administrateur si le problème persiste.");
-    });
+  document.getElementById('email_notification').addEventListener('blur', function() {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (re.test(this.value.trim())) clearError('err-email'); else showError('err-email');
   });
+
+  /* ── Progress timeline + barre de progression globale ── */
+  // Chaque étape porte son propre pourcentage cible (cumulé) atteint une fois "done".
+  // Timeline: submit → step1 actif @3s, terminé @12s (20%) | step2 @12s→70s (55%) | etc.
+  const STEPS = [
+    // id, activeAt, doneAt, pourcentage cumulé atteint une fois l'étape terminée
+    { id: 1, activeAt: 3000,  doneAt: 12000,  pct: 20,  statusActive: 'Analyse en cours…',            statusDone: 'Terminé ✓' },
+    { id: 2, activeAt: 12000, doneAt: 70000,  pct: 55,  statusActive: 'Génération en cours…',          statusDone: 'Terminé ✓' },
+    { id: 3, activeAt: 70000, doneAt: 82000,  pct: 75,  statusActive: 'Validation en cours…',          statusDone: 'Terminé ✓' },
+    { id: 4, activeAt: 82000, doneAt: 92000,  pct: 90,  statusActive: 'Enregistrement en cours…',      statusDone: 'Terminé ✓' },
+    { id: 5, activeAt: 92000, doneAt: 102000, pct: 100, statusActive: "Envoi de l'e-mail en cours…",   statusDone: 'E-mail envoyé ✓' }
+  ];
+
+  const STEP_LABELS = {
+    0: 'Fichier reçu',
+    1: 'Analyse du questionnaire',
+    2: 'Génération du XLSForm',
+    3: 'Validation & correction automatique',
+    4: 'Enregistrement sur Google Drive',
+    5: "Envoi de l'e-mail"
+  };
+
+  let progressTimers = [];
+
+  function setProgressBar(pct, label) {
+    progressFill.style.width = pct + '%';
+    progressPct.textContent = pct;
+    if (label) progressText.textContent = label;
+  }
+
+  function startProgress(userEmail) {
+    // Mettre à jour l'adresse dans le bloc final
+    sentEmailAddr.textContent = userEmail;
+    setProgressBar(5, STEP_LABELS[0]);
+
+    STEPS.forEach(step => {
+      const itemEl     = document.getElementById('tl-' + step.id);
+      const statusEl   = document.getElementById('tl-' + step.id + '-status');
+
+      // Active
+      const t1 = setTimeout(function() {
+        itemEl.classList.add('active');
+        statusEl.textContent = step.statusActive;
+        progressText.textContent = STEP_LABELS[step.id];
+      }, step.activeAt);
+
+      // Done
+      const t2 = setTimeout(function() {
+        itemEl.classList.remove('active');
+        itemEl.classList.add('done');
+        statusEl.textContent = step.statusDone;
+        setProgressBar(step.pct, STEP_LABELS[step.id]);
+
+        // Dernier step → afficher le succès final
+        if (step.id === 5) {
+          setTimeout(function() {
+            finalSuccess.classList.add('visible');
+            progressText.textContent = 'Terminé';
+            // Mettre à jour onglet 3
+            document.getElementById('tab-2').classList.remove('active');
+            document.getElementById('tab-2').classList.add('done');
+            document.getElementById('tab-3').classList.remove('active');
+            document.getElementById('tab-3').classList.add('active');
+          }, 600);
+        }
+      }, step.doneAt);
+
+      progressTimers.push(t1, t2);
+    });
+  }
+
+  function clearProgress() {
+    progressTimers.forEach(clearTimeout);
+    progressTimers = [];
+    STEPS.forEach(step => {
+      const itemEl   = document.getElementById('tl-' + step.id);
+      const statusEl = document.getElementById('tl-' + step.id + '-status');
+      itemEl.classList.remove('active', 'done');
+      statusEl.textContent = 'En attente…';
+    });
+    finalSuccess.classList.remove('visible');
+    setProgressBar(0, STEP_LABELS[0]);
+  }
+
+  /* ── Soumission ── */
+  form.addEventListener('submit', function(e) {
+    if (!validateForm()) { e.preventDefault(); return; }
+
+    const userEmail = document.getElementById('email_notification').value.trim();
+
+    // Passer à l'étape 2 dans les tabs
+    document.getElementById('tab-1').classList.remove('active');
+    document.getElementById('tab-1').classList.add('done');
+    document.getElementById('tab-2').classList.add('active');
+
+    // Cacher le formulaire, afficher le panneau de progression
+    btnSubmit.disabled = true;
+    form.style.display = 'none';
+    progressPanel.classList.add('visible');
+
+    // Démarrer la progression simulée
+    startProgress(userEmail);
+
+    // La soumission continue vers le hidden_iframe normalement
+    // (POST multipart direct vers le webhook n8n, sans rechargement de page)
+  });
+
+  /* ── Recommencer ── */
+  btnAgain.addEventListener('click', function() {
+    clearProgress();
+    form.reset();
+    clearFile();
+    form.style.display = 'block';
+    progressPanel.classList.remove('visible');
+    btnSubmit.disabled = false;
+
+    document.querySelectorAll('.step').forEach((s, i) => {
+      s.classList.remove('done', 'active');
+      if (i === 0) s.classList.add('active');
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
 })();
 </script>
 </body>
