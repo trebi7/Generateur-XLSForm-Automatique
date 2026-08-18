@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Générateur de fichiers XLSForm</title>
+  <title data-i18n="page_title">Générateur de fichiers XLSForm</title>
   <style>
     /* ── Reset & Base ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,6 +59,8 @@
 
     .logo-block svg { width: 36px; height: 36px; }
 
+    .header-text { flex: 1; }
+
     .header-text h1 {
       font-size: 1.25rem;
       font-weight: 700;
@@ -69,6 +71,38 @@
       font-size: .82rem;
       opacity: .80;
       margin-top: 2px;
+    }
+
+    /* ── Language switcher ── */
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,.12);
+      border-radius: 30px;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .lang-btn {
+      border: none;
+      background: none;
+      color: rgba(255,255,255,.75);
+      font-size: .8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      font-family: inherit;
+      letter-spacing: .4px;
+    }
+
+    .lang-btn:hover { color: #fff; }
+
+    .lang-btn.active {
+      background: var(--white);
+      color: var(--green-dark);
     }
 
     /* ── Main layout ── */
@@ -583,7 +617,7 @@
 
     /* ── Responsive ── */
     @media (max-width: 600px) {
-      header { padding: 16px 20px; }
+      header { padding: 16px 20px; flex-wrap: wrap; }
       .header-text h1 { font-size: 1rem; }
       .card-body { padding: 24px 20px; }
       .card-header { padding: 22px 20px 18px; }
@@ -605,8 +639,12 @@
     </svg>
   </div>
   <div class="header-text">
-    <h1>Générateur de fichiers XLSForm</h1>
+    <h1 data-i18n="header_title">Générateur de fichiers XLSForm</h1>
     <p>Armand Davy TRE BI, Data Analyst</p>
+  </div>
+  <div class="lang-switch" role="group" aria-label="Language / Langue">
+    <button type="button" class="lang-btn" id="lang-btn-fr" data-lang="fr">FR</button>
+    <button type="button" class="lang-btn" id="lang-btn-en" data-lang="en">EN</button>
   </div>
 </header>
 
@@ -614,8 +652,8 @@
 <main>
   <div class="card">
     <div class="card-header">
-      <h2>Convertissez votre questionnaire en XLSForm</h2>
-      <p>Déposez votre fichier Word, Excel ou PDF — notre système génère automatiquement un formulaire KoboToolbox prêt à déployer.</p>
+      <h2 data-i18n="card_title">Convertissez votre questionnaire en XLSForm</h2>
+      <p data-i18n="card_subtitle">Déposez votre fichier Word, Excel ou PDF — notre système génère automatiquement un formulaire KoboToolbox prêt à déployer.</p>
     </div>
 
     <div class="card-body">
@@ -623,13 +661,13 @@
       <!-- Steps -->
       <div class="steps">
         <div class="step active" id="tab-1">
-          <div class="step-num">1</div><br>Déposez votre fichier
+          <div class="step-num">1</div><br><span data-i18n="step1">Déposez votre fichier</span>
         </div>
         <div class="step" id="tab-2">
-          <div class="step-num">2</div><br>Traitement
+          <div class="step-num">2</div><br><span data-i18n="step2">Traitement</span>
         </div>
         <div class="step" id="tab-3">
-          <div class="step-num">3</div><br>Recevez le XLSForm
+          <div class="step-num">3</div><br><span data-i18n="step3">Recevez le XLSForm</span>
         </div>
       </div>
 
@@ -641,28 +679,32 @@
             target="hidden_iframe"
             novalidate>
 
+        <!-- Langue choisie (envoyée au workflow n8n) -->
+        <input type="hidden" id="language" name="language" value="fr">
+
         <!-- Nom du projet -->
         <div class="field-group">
           <label for="nom_projet">
-            Nom du projet / de l'enquête <span class="required">*</span>
+            <span data-i18n="label_nom_projet">Nom du projet / de l'enquête</span> <span class="required">*</span>
           </label>
-          <div class="field-hint">Ex : Enquête ménages 2026 · Évaluation des bénéficiaires</div>
+          <div class="field-hint" data-i18n="hint_nom_projet">Ex : Enquête ménages 2026 · Évaluation des bénéficiaires</div>
           <input
             type="text"
             id="nom_projet"
             name="nom_projet"
+            data-i18n-placeholder="placeholder_nom_projet"
             placeholder="Nom de votre projet ou enquête"
             autocomplete="off"
             required>
-          <div class="error-msg" id="err-nom">Ce champ est obligatoire.</div>
+          <div class="error-msg" id="err-nom" data-i18n="err_nom">Ce champ est obligatoire.</div>
         </div>
 
         <!-- Fichier questionnaire -->
         <div class="field-group">
           <label>
-            Fichier questionnaire <span class="required">*</span>
+            <span data-i18n="label_fichier">Fichier questionnaire</span> <span class="required">*</span>
           </label>
-          <div class="field-hint">Votre questionnaire Word, Excel ou PDF (texte sélectionnable)</div>
+          <div class="field-hint" data-i18n="hint_fichier">Votre questionnaire Word, Excel ou PDF (texte sélectionnable)</div>
 
           <div class="drop-zone" id="drop-zone">
             <input
@@ -672,36 +714,37 @@
               accept=".docx,.xlsx,.xls,.pdf"
               required>
             <span class="drop-icon">📄</span>
-            <div class="drop-text">
+            <div class="drop-text" data-i18n-html="drop_text">
               <strong>Glissez-déposez votre fichier ici</strong><br>
               ou cliquez pour parcourir
             </div>
-            <div class="drop-formats">Formats acceptés : .docx · .xlsx · .xls · .pdf</div>
+            <div class="drop-formats" data-i18n="drop_formats">Formats acceptés : .docx · .xlsx · .xls · .pdf</div>
           </div>
 
           <div class="file-selected" id="file-info">
             <span class="file-icon" id="file-icon">📄</span>
             <span class="file-name" id="file-name">—</span>
             <span class="file-size" id="file-size">—</span>
-            <button type="button" class="file-remove" id="file-remove" title="Retirer le fichier">✕</button>
+            <button type="button" class="file-remove" id="file-remove" data-i18n-title="file_remove_title" title="Retirer le fichier">✕</button>
           </div>
-          <div class="error-msg" id="err-file">Veuillez sélectionner un fichier valide (.docx, .xlsx, .xls ou .pdf).</div>
+          <div class="error-msg" id="err-file" data-i18n="err_file">Veuillez sélectionner un fichier valide (.docx, .xlsx, .xls ou .pdf).</div>
         </div>
 
         <!-- Email -->
         <div class="field-group">
           <label for="email_notification">
-            Adresse e-mail <span class="required">*</span>
+            <span data-i18n="label_email">Adresse e-mail</span> <span class="required">*</span>
           </label>
-          <div class="field-hint">Le lien Google Drive vers votre XLSForm vous sera envoyé à cette adresse</div>
+          <div class="field-hint" data-i18n="hint_email">Le lien Google Drive vers votre XLSForm vous sera envoyé à cette adresse</div>
           <input
             type="email"
             id="email_notification"
             name="email_notification"
+            data-i18n-placeholder="placeholder_email"
             placeholder="votre@email.com"
             autocomplete="email"
             required>
-          <div class="error-msg" id="err-email">Veuillez saisir une adresse e-mail valide.</div>
+          <div class="error-msg" id="err-email" data-i18n="err_email">Veuillez saisir une adresse e-mail valide.</div>
         </div>
 
         <hr class="divider">
@@ -709,22 +752,23 @@
         <!-- Observations -->
         <div class="field-group">
           <label for="observations">
-            Observations / Instructions complémentaires
-            <span class="optional">(facultatif)</span>
+            <span data-i18n="label_observations">Observations / Instructions complémentaires</span>
+            <span class="optional" data-i18n="optional_tag">(facultatif)</span>
           </label>
-          <div class="field-hint">
+          <div class="field-hint" data-i18n="hint_observations">
             Précisez des instructions spécifiques : sections roster, contraintes particulières, logiques de saut, numéros de téléphone obligatoires, etc.
           </div>
           <textarea
             id="observations"
             name="observations"
+            data-i18n-placeholder="placeholder_observations"
             placeholder="Ex : La section ménage est un roster. Vérifiez que les numéros de téléphone ont bien 10 chiffres. Accordez une attention particulière à la question 7 sur les sources de financement."></textarea>
         </div>
 
         <!-- Submit -->
         <button type="submit" class="btn-submit" id="btn-submit">
           <span>⚡</span>
-          <span>Générer mon XLSForm</span>
+          <span data-i18n="btn_submit">Générer mon XLSForm</span>
         </button>
 
       </form>
@@ -733,8 +777,8 @@
       <div id="progress-panel">
 
         <div class="progress-header">
-          <h3>⚙️ Traitement en cours…</h3>
-          <p>Votre questionnaire est en cours de traitement. Ne fermez pas cet onglet.<br>Cette opération prend <strong>1 à 3 minutes</strong>.</p>
+          <h3 data-i18n="progress_title">⚙️ Traitement en cours…</h3>
+          <p data-i18n-html="progress_subtitle">Votre questionnaire est en cours de traitement. Ne fermez pas cet onglet.<br>Cette opération prend <strong>1 à 3 minutes</strong>.</p>
         </div>
 
         <!-- Barre de progression globale -->
@@ -742,7 +786,7 @@
           <div class="progress-bar-fill" id="progress-bar-fill"></div>
         </div>
         <div class="progress-bar-label">
-          <span id="progress-step-text">Fichier reçu</span>
+          <span id="progress-step-text" data-i18n="tl0_label">Fichier reçu</span>
           <span><span id="progress-percent">0</span>%</span>
         </div>
 
@@ -751,48 +795,48 @@
           <div class="timeline-item done" id="tl-0">
             <div class="tl-icon">✅</div>
             <div class="tl-body">
-              <div class="tl-label">Fichier reçu</div>
-              <div class="tl-status" id="tl-0-status">Terminé</div>
+              <div class="tl-label" data-i18n="tl0_label">Fichier reçu</div>
+              <div class="tl-status" id="tl-0-status" data-i18n="tl_done">Terminé</div>
             </div>
           </div>
 
           <div class="timeline-item" id="tl-1">
             <div class="tl-icon" id="tl-1-icon">📄</div>
             <div class="tl-body">
-              <div class="tl-label">Analyse du questionnaire</div>
-              <div class="tl-status" id="tl-1-status">En attente…</div>
+              <div class="tl-label" data-i18n="tl1_label">Analyse du questionnaire</div>
+              <div class="tl-status" id="tl-1-status" data-i18n="tl_waiting">En attente…</div>
             </div>
           </div>
 
           <div class="timeline-item" id="tl-2">
             <div class="tl-icon" id="tl-2-icon">🧠</div>
             <div class="tl-body">
-              <div class="tl-label">Génération du XLSForm</div>
-              <div class="tl-status" id="tl-2-status">En attente…</div>
+              <div class="tl-label" data-i18n="tl2_label">Génération du XLSForm</div>
+              <div class="tl-status" id="tl-2-status" data-i18n="tl_waiting">En attente…</div>
             </div>
           </div>
 
           <div class="timeline-item" id="tl-3">
             <div class="tl-icon" id="tl-3-icon">🔍</div>
             <div class="tl-body">
-              <div class="tl-label">Validation &amp; correction automatique</div>
-              <div class="tl-status" id="tl-3-status">En attente…</div>
+              <div class="tl-label" data-i18n="tl3_label">Validation &amp; correction automatique</div>
+              <div class="tl-status" id="tl-3-status" data-i18n="tl_waiting">En attente…</div>
             </div>
           </div>
 
           <div class="timeline-item" id="tl-4">
             <div class="tl-icon" id="tl-4-icon">☁️</div>
             <div class="tl-body">
-              <div class="tl-label">Enregistrement sur Google Drive</div>
-              <div class="tl-status" id="tl-4-status">En attente…</div>
+              <div class="tl-label" data-i18n="tl4_label">Enregistrement sur Google Drive</div>
+              <div class="tl-status" id="tl-4-status" data-i18n="tl_waiting">En attente…</div>
             </div>
           </div>
 
           <div class="timeline-item" id="tl-5">
             <div class="tl-icon" id="tl-5-icon">📧</div>
             <div class="tl-body">
-              <div class="tl-label">Envoi de l'e-mail</div>
-              <div class="tl-status" id="tl-5-status">En attente…</div>
+              <div class="tl-label" data-i18n="tl5_label">Envoi de l'e-mail</div>
+              <div class="tl-status" id="tl-5-status" data-i18n="tl_waiting">En attente…</div>
             </div>
           </div>
 
@@ -801,16 +845,16 @@
         <!-- Final success (shown when all steps done) -->
         <div id="final-success">
           <div class="final-icon">🎉</div>
-          <div class="final-title">XLSForm généré avec succès !</div>
+          <div class="final-title" data-i18n="final_title">XLSForm généré avec succès !</div>
           <div class="final-email-confirm">
             <span>📧</span>
-            <span>E-mail envoyé à <strong id="sent-email-addr">—</strong></span>
+            <span data-i18n-html="final_email_confirm"><span data-i18n-inline="final_email_confirm_text">E-mail envoyé à</span> <strong id="sent-email-addr">—</strong></span>
           </div>
-          <div class="info-box">
+          <div class="info-box" data-i18n-html="final_info_box">
             📂 Ouvrez votre boîte mail pour retrouver le lien Google Drive vers votre fichier <strong>.xlsx</strong> prêt à déployer sur KoboToolbox.<br><br>
             📝 Le fichier est nommé : <strong>Formulaire_<em>NomProjet</em>_<em>Date</em>_<em>Heure</em>.xlsx</strong>
           </div>
-          <button class="btn-again" id="btn-again">Soumettre un autre questionnaire</button>
+          <button class="btn-again" id="btn-again" data-i18n="btn_again">Soumettre un autre questionnaire</button>
         </div>
 
       </div><!-- /progress-panel -->
@@ -821,15 +865,15 @@
     <div class="info-strip">
       <div class="info-item">
         <span class="info-item-icon">🤖</span>
-        <div><strong>Traitement automatisé</strong><br>Analyse intelligente et conversion automatique de votre questionnaire</div>
+        <div data-i18n-html="info1"><strong>Traitement automatisé</strong><br>Analyse intelligente et conversion automatique de votre questionnaire</div>
       </div>
       <div class="info-item">
         <span class="info-item-icon">✅</span>
-        <div><strong>Validation automatique</strong><br>Noms de variables, listes de choix, logiques de saut vérifiés</div>
+        <div data-i18n-html="info2"><strong>Validation automatique</strong><br>Noms de variables, listes de choix, logiques de saut vérifiés</div>
       </div>
       <div class="info-item">
         <span class="info-item-icon">☁️</span>
-        <div><strong>Livraison sur Drive</strong><br>Fichier .xlsx déposé dans votre dossier Google Drive partagé</div>
+        <div data-i18n-html="info3"><strong>Livraison sur Drive</strong><br>Fichier .xlsx déposé dans votre dossier Google Drive partagé</div>
       </div>
     </div>
 
@@ -841,12 +885,181 @@
 
 <!-- ══ Footer ══ -->
 <footer>
-  © 2026 · Workflow propulsé par <a href="https://n8n.io" target="_blank">n8n</a> &amp; KoboToolbox
+  <span data-i18n-html="footer_text">© 2026 · Workflow propulsé par <a href="https://n8n.io" target="_blank">n8n</a> &amp; KoboToolbox</span>
 </footer>
 
 <script>
 (function() {
   'use strict';
+
+  /* ══════════════════════════════════════════════
+     ── i18n : dictionnaire FR / EN ──
+     ══════════════════════════════════════════════ */
+  const I18N = {
+    fr: {
+      page_title: 'Générateur de fichiers XLSForm',
+      header_title: 'Générateur de fichiers XLSForm',
+      card_title: 'Convertissez votre questionnaire en XLSForm',
+      card_subtitle: 'Déposez votre fichier Word, Excel ou PDF — notre système génère automatiquement un formulaire KoboToolbox prêt à déployer.',
+      step1: 'Déposez votre fichier',
+      step2: 'Traitement',
+      step3: 'Recevez le XLSForm',
+      label_nom_projet: "Nom du projet / de l'enquête",
+      hint_nom_projet: 'Ex : Enquête ménages 2026 · Évaluation des bénéficiaires',
+      placeholder_nom_projet: 'Nom de votre projet ou enquête',
+      err_nom: 'Ce champ est obligatoire.',
+      label_fichier: 'Fichier questionnaire',
+      hint_fichier: 'Votre questionnaire Word, Excel ou PDF (texte sélectionnable)',
+      drop_text: '<strong>Glissez-déposez votre fichier ici</strong><br>ou cliquez pour parcourir',
+      drop_formats: 'Formats acceptés : .docx · .xlsx · .xls · .pdf',
+      file_remove_title: 'Retirer le fichier',
+      err_file: 'Veuillez sélectionner un fichier valide (.docx, .xlsx, .xls ou .pdf).',
+      err_file_format: 'Format non accepté. Utilisez .docx, .xlsx, .xls ou .pdf',
+      label_email: 'Adresse e-mail',
+      hint_email: 'Le lien Google Drive vers votre XLSForm vous sera envoyé à cette adresse',
+      placeholder_email: 'votre@email.com',
+      err_email: 'Veuillez saisir une adresse e-mail valide.',
+      label_observations: 'Observations / Instructions complémentaires',
+      optional_tag: '(facultatif)',
+      hint_observations: 'Précisez des instructions spécifiques : sections roster, contraintes particulières, logiques de saut, numéros de téléphone obligatoires, etc.',
+      placeholder_observations: "Ex : La section ménage est un roster. Vérifiez que les numéros de téléphone ont bien 10 chiffres. Accordez une attention particulière à la question 7 sur les sources de financement.",
+      btn_submit: 'Générer mon XLSForm',
+      progress_title: '⚙️ Traitement en cours…',
+      progress_subtitle: 'Votre questionnaire est en cours de traitement. Ne fermez pas cet onglet.<br>Cette opération prend <strong>1 à 3 minutes</strong>.',
+      tl0_label: 'Fichier reçu',
+      tl1_label: 'Analyse du questionnaire',
+      tl2_label: 'Génération du XLSForm',
+      tl3_label: 'Validation &amp; correction automatique',
+      tl4_label: 'Enregistrement sur Google Drive',
+      tl5_label: "Envoi de l'e-mail",
+      tl_done: 'Terminé',
+      tl_waiting: 'En attente…',
+      tl1_active: 'Analyse en cours…',
+      tl2_active: 'Génération en cours…',
+      tl3_active: 'Validation en cours…',
+      tl4_active: 'Enregistrement en cours…',
+      tl5_active: "Envoi de l'e-mail en cours…",
+      tl_done_check: 'Terminé ✓',
+      tl5_done: 'E-mail envoyé ✓',
+      final_title: 'XLSForm généré avec succès !',
+      final_email_confirm_text: 'E-mail envoyé à',
+      final_info_box: '📂 Ouvrez votre boîte mail pour retrouver le lien Google Drive vers votre fichier <strong>.xlsx</strong> prêt à déployer sur KoboToolbox.<br><br>📝 Le fichier est nommé : <strong>Formulaire_<em>NomProjet</em>_<em>Date</em>_<em>Heure</em>.xlsx</strong>',
+      btn_again: 'Soumettre un autre questionnaire',
+      info1: '<strong>Traitement automatisé</strong><br>Analyse intelligente et conversion automatique de votre questionnaire',
+      info2: '<strong>Validation automatique</strong><br>Noms de variables, listes de choix, logiques de saut vérifiés',
+      info3: '<strong>Livraison sur Drive</strong><br>Fichier .xlsx déposé dans votre dossier Google Drive partagé',
+      footer_text: '© 2026 · Workflow propulsé par <a href="https://n8n.io" target="_blank">n8n</a> &amp; KoboToolbox',
+      progress_step_text_final: 'Terminé'
+    },
+    en: {
+      page_title: 'XLSForm Generator',
+      header_title: 'XLSForm Generator',
+      card_title: 'Convert your questionnaire into an XLSForm',
+      card_subtitle: 'Drop your Word, Excel or PDF file — our system automatically generates a KoboToolbox form ready to deploy.',
+      step1: 'Upload your file',
+      step2: 'Processing',
+      step3: 'Receive your XLSForm',
+      label_nom_projet: 'Project / survey name',
+      hint_nom_projet: 'E.g.: 2026 Household Survey · Beneficiary Assessment',
+      placeholder_nom_projet: 'Name of your project or survey',
+      err_nom: 'This field is required.',
+      label_fichier: 'Questionnaire file',
+      hint_fichier: 'Your Word, Excel or PDF questionnaire (with selectable text)',
+      drop_text: '<strong>Drag and drop your file here</strong><br>or click to browse',
+      drop_formats: 'Accepted formats: .docx · .xlsx · .xls · .pdf',
+      file_remove_title: 'Remove file',
+      err_file: 'Please select a valid file (.docx, .xlsx, .xls or .pdf).',
+      err_file_format: 'Unsupported format. Use .docx, .xlsx, .xls or .pdf',
+      label_email: 'Email address',
+      hint_email: 'The Google Drive link to your XLSForm will be sent to this address',
+      placeholder_email: 'your@email.com',
+      err_email: 'Please enter a valid email address.',
+      label_observations: 'Observations / Additional instructions',
+      optional_tag: '(optional)',
+      hint_observations: 'Specify any particular instructions: roster sections, specific constraints, skip logic, required phone numbers, etc.',
+      placeholder_observations: 'E.g.: The household section is a roster. Make sure phone numbers have exactly 10 digits. Pay special attention to question 7 about funding sources.',
+      btn_submit: 'Generate my XLSForm',
+      progress_title: '⚙️ Processing…',
+      progress_subtitle: 'Your questionnaire is being processed. Do not close this tab.<br>This takes <strong>1 to 3 minutes</strong>.',
+      tl0_label: 'File received',
+      tl1_label: 'Analyzing questionnaire',
+      tl2_label: 'Generating the XLSForm',
+      tl3_label: 'Validation &amp; automatic correction',
+      tl4_label: 'Saving to Google Drive',
+      tl5_label: 'Sending the email',
+      tl_done: 'Done',
+      tl_waiting: 'Waiting…',
+      tl1_active: 'Analyzing…',
+      tl2_active: 'Generating…',
+      tl3_active: 'Validating…',
+      tl4_active: 'Saving…',
+      tl5_active: 'Sending email…',
+      tl_done_check: 'Done ✓',
+      tl5_done: 'Email sent ✓',
+      final_title: 'XLSForm generated successfully!',
+      final_email_confirm_text: 'Email sent to',
+      final_info_box: '📂 Open your mailbox to find the Google Drive link to your <strong>.xlsx</strong> file, ready to deploy on KoboToolbox.<br><br>📝 The file is named: <strong>Formulaire_<em>ProjectName</em>_<em>Date</em>_<em>Time</em>.xlsx</strong>',
+      btn_again: 'Submit another questionnaire',
+      info1: '<strong>Automated processing</strong><br>Intelligent analysis and automatic conversion of your questionnaire',
+      info2: '<strong>Automatic validation</strong><br>Variable names, choice lists, skip logic all checked',
+      info3: '<strong>Delivered to Drive</strong><br>.xlsx file placed in your shared Google Drive folder',
+      footer_text: '© 2026 · Workflow powered by <a href="https://n8n.io" target="_blank">n8n</a> &amp; KoboToolbox',
+      progress_step_text_final: 'Done'
+    }
+  };
+
+  let currentLang = 'fr';
+
+  function detectInitialLang() {
+    try {
+      const saved = localStorage.getItem('xlsform_lang');
+      if (saved === 'fr' || saved === 'en') return saved;
+    } catch (e) { /* localStorage indisponible */ }
+    const nav = (navigator.language || navigator.userLanguage || 'fr').toLowerCase();
+    return nav.startsWith('en') ? 'en' : 'fr';
+  }
+
+  function applyLanguage(lang) {
+    currentLang = (lang === 'en') ? 'en' : 'fr';
+    const dict = I18N[currentLang];
+
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+    });
+
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+      const key = el.getAttribute('data-i18n-title');
+      if (dict[key] !== undefined) el.setAttribute('title', dict[key]);
+    });
+
+    // Champ caché envoyé au workflow n8n
+    const langField = document.getElementById('language');
+    if (langField) langField.value = currentLang;
+
+    // Boutons de langue
+    document.getElementById('lang-btn-fr').classList.toggle('active', currentLang === 'fr');
+    document.getElementById('lang-btn-en').classList.toggle('active', currentLang === 'en');
+
+    // Rafraîchir les libellés dynamiques déjà affichés (timeline en cours, etc.)
+    refreshDynamicLabels();
+
+    try { localStorage.setItem('xlsform_lang', currentLang); } catch (e) { /* ignore */ }
+  }
+
+  function t(key) { return I18N[currentLang][key] || key; }
 
   /* ── Éléments ── */
   const form          = document.getElementById('xlsform-form');
@@ -870,9 +1083,12 @@
   const EXT_ICONS = { docx:'📝', doc:'📝', xlsx:'📊', xls:'📊', pdf:'📕' };
 
   function formatBytes(b) {
-    if (b < 1024) return b + ' o';
-    if (b < 1024*1024) return (b/1024).toFixed(0) + ' Ko';
-    return (b/(1024*1024)).toFixed(1) + ' Mo';
+    const unitKo = currentLang === 'en' ? 'KB' : 'Ko';
+    const unitMo = currentLang === 'en' ? 'MB' : 'Mo';
+    const unitO  = currentLang === 'en' ? 'B'  : 'o';
+    if (b < 1024) return b + ' ' + unitO;
+    if (b < 1024*1024) return (b/1024).toFixed(0) + ' ' + unitKo;
+    return (b/(1024*1024)).toFixed(1) + ' ' + unitMo;
   }
 
   function showFile(file) {
@@ -904,7 +1120,7 @@
     if (!f) return;
     const ext = f.name.split('.').pop().toLowerCase();
     if (!['docx','xlsx','xls','pdf'].includes(ext)) {
-      showError('err-file', 'Format non accepté. Utilisez .docx, .xlsx, .xls ou .pdf');
+      showError('err-file', t('err_file_format'));
       return;
     }
     try {
@@ -942,23 +1158,23 @@
     let valid = true;
 
     const nom = document.getElementById('nom_projet');
-    if (!nom.value.trim()) { showError('err-nom'); valid = false; }
+    if (!nom.value.trim()) { showError('err-nom', t('err_nom')); valid = false; }
     else clearError('err-nom');
 
     if (!fileInput.files || !fileInput.files.length) {
-      showError('err-file', 'Veuillez sélectionner un fichier (.docx, .xlsx, .xls ou .pdf).');
+      showError('err-file', t('err_file'));
       valid = false;
     } else {
       const ext = fileInput.files[0].name.split('.').pop().toLowerCase();
       if (!['docx','xlsx','xls','pdf'].includes(ext)) {
-        showError('err-file', 'Format non accepté. Utilisez .docx, .xlsx, .xls ou .pdf');
+        showError('err-file', t('err_file_format'));
         valid = false;
       } else clearError('err-file');
     }
 
     const email = document.getElementById('email_notification');
     const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRe.test(email.value.trim())) { showError('err-email'); valid = false; }
+    if (!emailRe.test(email.value.trim())) { showError('err-email', t('err_email')); valid = false; }
     else clearError('err-email');
 
     return valid;
@@ -966,71 +1182,86 @@
 
   /* ── Inline validation ── */
   document.getElementById('nom_projet').addEventListener('blur', function() {
-    if (this.value.trim()) clearError('err-nom'); else showError('err-nom');
+    if (this.value.trim()) clearError('err-nom'); else showError('err-nom', t('err_nom'));
   });
 
   document.getElementById('email_notification').addEventListener('blur', function() {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (re.test(this.value.trim())) clearError('err-email'); else showError('err-email');
+    if (re.test(this.value.trim())) clearError('err-email'); else showError('err-email', t('err_email'));
   });
 
   /* ── Progress timeline + barre de progression globale ── */
   // Chaque étape porte son propre pourcentage cible (cumulé) atteint une fois "done".
   // Timeline: submit → step1 actif @3s, terminé @12s (20%) | step2 @12s→70s (55%) | etc.
-  const STEPS = [
-    // id, activeAt, doneAt, pourcentage cumulé atteint une fois l'étape terminée
-    { id: 1, activeAt: 3000,  doneAt: 12000,  pct: 20,  statusActive: 'Analyse en cours…',            statusDone: 'Terminé ✓' },
-    { id: 2, activeAt: 12000, doneAt: 70000,  pct: 55,  statusActive: 'Génération en cours…',          statusDone: 'Terminé ✓' },
-    { id: 3, activeAt: 70000, doneAt: 82000,  pct: 75,  statusActive: 'Validation en cours…',          statusDone: 'Terminé ✓' },
-    { id: 4, activeAt: 82000, doneAt: 92000,  pct: 90,  statusActive: 'Enregistrement en cours…',      statusDone: 'Terminé ✓' },
-    { id: 5, activeAt: 92000, doneAt: 102000, pct: 100, statusActive: "Envoi de l'e-mail en cours…",   statusDone: 'E-mail envoyé ✓' }
+  const STEP_DEFS = [
+    { id: 1, activeAt: 3000,  doneAt: 12000,  pct: 20,  labelKey: 'tl1_label', activeKey: 'tl1_active' },
+    { id: 2, activeAt: 12000, doneAt: 70000,  pct: 55,  labelKey: 'tl2_label', activeKey: 'tl2_active' },
+    { id: 3, activeAt: 70000, doneAt: 82000,  pct: 75,  labelKey: 'tl3_label', activeKey: 'tl3_active' },
+    { id: 4, activeAt: 82000, doneAt: 92000,  pct: 90,  labelKey: 'tl4_label', activeKey: 'tl4_active' },
+    { id: 5, activeAt: 92000, doneAt: 102000, pct: 100, labelKey: 'tl5_label', activeKey: 'tl5_active' }
   ];
 
-  const STEP_LABELS = {
-    0: 'Fichier reçu',
-    1: 'Analyse du questionnaire',
-    2: 'Génération du XLSForm',
-    3: 'Validation & correction automatique',
-    4: 'Enregistrement sur Google Drive',
-    5: "Envoi de l'e-mail"
-  };
-
   let progressTimers = [];
+  let currentStepState = 0; // 0 = "Fichier reçu", 1-5 = active, -1..-5 = done (negative marks step done, magnitude = id)
+  const stepStatus = {}; // id -> 'active' | 'done'
 
-  function setProgressBar(pct, label) {
+  function setProgressBar(pct, labelKey) {
     progressFill.style.width = pct + '%';
     progressPct.textContent = pct;
-    if (label) progressText.textContent = label;
+    if (labelKey) progressText.textContent = t(labelKey);
+  }
+
+  function refreshDynamicLabels() {
+    // Ré-applique les libellés dynamiques de la timeline si une soumission est en cours
+    STEP_DEFS.forEach(step => {
+      const statusEl = document.getElementById('tl-' + step.id + '-status');
+      const state = stepStatus[step.id];
+      if (state === 'active') statusEl.textContent = t(step.activeKey);
+      else if (state === 'done') statusEl.textContent = (step.id === 5) ? t('tl5_done') : t('tl_done_check');
+      else statusEl.textContent = t('tl_waiting');
+    });
+    if (progressPanel.classList.contains('visible') && !finalSuccess.classList.contains('visible')) {
+      const activeStep = STEP_DEFS.find(s => stepStatus[s.id] === 'active');
+      const lastDone = [...STEP_DEFS].reverse().find(s => stepStatus[s.id] === 'done');
+      if (activeStep) progressText.textContent = t(activeStep.labelKey);
+      else if (lastDone) progressText.textContent = t(lastDone.labelKey);
+      else progressText.textContent = t('tl0_label');
+    }
+    if (finalSuccess.classList.contains('visible')) {
+      progressText.textContent = t('progress_step_text_final');
+    }
   }
 
   function startProgress(userEmail) {
     // Mettre à jour l'adresse dans le bloc final
     sentEmailAddr.textContent = userEmail;
-    setProgressBar(5, STEP_LABELS[0]);
+    setProgressBar(5, 'tl0_label');
 
-    STEPS.forEach(step => {
+    STEP_DEFS.forEach(step => {
       const itemEl     = document.getElementById('tl-' + step.id);
       const statusEl   = document.getElementById('tl-' + step.id + '-status');
 
       // Active
       const t1 = setTimeout(function() {
         itemEl.classList.add('active');
-        statusEl.textContent = step.statusActive;
-        progressText.textContent = STEP_LABELS[step.id];
+        stepStatus[step.id] = 'active';
+        statusEl.textContent = t(step.activeKey);
+        progressText.textContent = t(step.labelKey);
       }, step.activeAt);
 
       // Done
       const t2 = setTimeout(function() {
         itemEl.classList.remove('active');
         itemEl.classList.add('done');
-        statusEl.textContent = step.statusDone;
-        setProgressBar(step.pct, STEP_LABELS[step.id]);
+        stepStatus[step.id] = 'done';
+        statusEl.textContent = (step.id === 5) ? t('tl5_done') : t('tl_done_check');
+        setProgressBar(step.pct, step.labelKey);
 
         // Dernier step → afficher le succès final
         if (step.id === 5) {
           setTimeout(function() {
             finalSuccess.classList.add('visible');
-            progressText.textContent = 'Terminé';
+            progressText.textContent = t('progress_step_text_final');
             // Mettre à jour onglet 3
             document.getElementById('tab-2').classList.remove('active');
             document.getElementById('tab-2').classList.add('done');
@@ -1047,14 +1278,15 @@
   function clearProgress() {
     progressTimers.forEach(clearTimeout);
     progressTimers = [];
-    STEPS.forEach(step => {
+    for (const k in stepStatus) delete stepStatus[k];
+    STEP_DEFS.forEach(step => {
       const itemEl   = document.getElementById('tl-' + step.id);
       const statusEl = document.getElementById('tl-' + step.id + '-status');
       itemEl.classList.remove('active', 'done');
-      statusEl.textContent = 'En attente…';
+      statusEl.textContent = t('tl_waiting');
     });
     finalSuccess.classList.remove('visible');
-    setProgressBar(0, STEP_LABELS[0]);
+    setProgressBar(0, 'tl0_label');
   }
 
   /* ── Soumission ── */
@@ -1078,6 +1310,7 @@
 
     // La soumission continue vers le hidden_iframe normalement
     // (POST multipart direct vers le webhook n8n, sans rechargement de page)
+    // Le champ caché #language porte la langue choisie par l'utilisateur.
   });
 
   /* ── Recommencer ── */
@@ -1088,6 +1321,7 @@
     form.style.display = 'block';
     progressPanel.classList.remove('visible');
     btnSubmit.disabled = false;
+    document.getElementById('language').value = currentLang;
 
     document.querySelectorAll('.step').forEach((s, i) => {
       s.classList.remove('done', 'active');
@@ -1096,6 +1330,13 @@
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  /* ── Sélecteur de langue ── */
+  document.getElementById('lang-btn-fr').addEventListener('click', () => applyLanguage('fr'));
+  document.getElementById('lang-btn-en').addEventListener('click', () => applyLanguage('en'));
+
+  /* ── Initialisation ── */
+  applyLanguage(detectInitialLang());
 
 })();
 </script>
